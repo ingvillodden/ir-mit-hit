@@ -2,12 +2,142 @@
 title: "data wrangling"
 format: html
 editor: visual
+editor_options: 
+  chunk_output_type: console
 ---
 
 #### Installing needed packages for my project
 
 ```{r}
 
+library(readxl) 
+library(writexl)
+library(tidyverse)
+library(ggpubr)
+library(lme4)
+library(emmeans)
+library(ggplot2)
+library(irr)
+library(psych)
+library(cowplot)
+library(plotly)
+library(jtools)
+
+```
+
+## Importing and preparing test data
+
+```{r}
+
+# Importing data
+cycling_data <-
+  read_excel("data/prolonged_cycling_test_ir_data.xlsx", na = "na") %>%
+  print()
+
+legextention_data <-
+  read_excel("data/leg_extention_ir_data.xlsx", na = "na") %>%
+  print()
+
+# Cobining the above data sets and creating variables relative to body mass
+mutate_data <- 
+  cycling_data %>% 
+  inner_join(legextention_data) %>% 
+  mutate(w.rel.max =  (w.max / bodymass)) %>% 
+  mutate(w.rel.4mmol = (w.4mmol / bodymass))%>%
+  mutate(w.rel.15tt = (w.15tt / bodymass))%>%
+  mutate(w.rel.mean.10sec = (w.mean.10sec / bodymass)) %>%
+  mutate(peak.rel.torque.60 = (peak.torque.60 / bodymass)) %>%
+  mutate(peak.rel.torque.240 = (peak.torque.240 / bodymass)) %>%
+  print()
+
+# Calculating the performance index variable
+index_data <- 
+  mutate_data %>% 
+  dplyr::select(id, period, timepoint, w.rel.4mmol, w.rel.max, w.rel.15tt) %>%
+  pivot_longer(names_to = "variable", 
+               values_to = "values", 
+               cols = w.rel.4mmol:w.rel.15tt) %>%
+  group_by(variable) %>%
+  mutate(scaled = values / max(values, na.rm = TRUE)) %>%
+  group_by(id, period, timepoint) %>%
+  summarise(index = mean(scaled)) %>%
+  print()
+
+# Combining the above data sets 
+# This formatting wil be used for descriptive statistics at onset of the 
+# training intervention for the 44 individual participants
+t1_t2_t3_data <- 
+  mutate_data %>% 
+  inner_join(index_data) %>%
+  print()
+
+# Formatting the timepoint variable to fit the later analyses
+pre_post_data_con <- t1_t2_t3_data %>% 
+  filter(period == "con") %>% 
+  select(-timepoint) %>% 
+  mutate(timepoint = if_else(pre.post == "pre.con", "pre", "post")) %>% 
+  print()
+
+pre_post_data_hit <- t1_t2_t3_data %>% 
+  filter(period == "hit") %>% 
+  select(-timepoint) %>% 
+  mutate(timepoint = if_else(pre.post == "pre.hit", "pre", "post")) %>% 
+  print()
+
+pre_data_mit_con <- t1_t2_t3_data %>% 
+  filter(period == "mit") %>% 
+  select(-period, -timepoint) %>% 
+  filter(pre.post == "pre.con" | pre.post == "post.mit.pre.con" | pre.post == "pre.mit" | pre.post == "post.con.pre.mit") %>% 
+  mutate(timepoint = "pre") %>% 
+  mutate(period = if_else(pre.post == "post.mit.pre.con" | pre.post == "pre.con", "con", "mit")) %>% 
+  #select(id, period, timepoint, vo2.rel.max) %>% 
+  print()
+
+post_data_mit_con <- t1_t2_t3_data %>% 
+  filter(period == "mit") %>%
+  select(-period, -timepoint) %>% 
+  filter(pre.post == "post.con" | pre.post == "post.mit.pre.con" | pre.post == "post.mit" | pre.post == "post.con.pre.mit") %>% 
+  mutate(timepoint = "post") %>% 
+  mutate(period = if_else(pre.post == "post.con.pre.mit" | pre.post == "post.con", "con", "mit")) %>%
+  #select(id, period, timepoint, vo2.rel.max) %>% 
+  print()
+
+# Combining the formatted data sets
+pre_post_data <- 
+  pre_data_mit_con %>% 
+  full_join(post_data_mit_con) %>% 
+  full_join(pre_post_data_hit) %>% 
+  full_join(pre_post_data_con) %>%
+  print()
+
+# Preparing and combining pre intervention data
+tt_data <- 
+  read_excel("data/40tt_ir_data.xlsx", na = "na") %>%
+  print()
+
+ultrasound_data <- 
+  read_excel("data/ultrasound_ir_data.xlsx", na = "na") %>%
+  print()
+
+dxa_data <- 
+  read_excel("data/dxa_ir_data.xlsx", na = "na") %>%
+  print()
+
+
+hb_data <- 
+  read_excel("data/hb_ir_data.xlsx", na = "na") %>%
+  print()
+
+# Add immuno and CS data here later
+
+pre_intervention_data <-
+  tt_data %>% 
+  inner_join(ultrasound_data) %>% 
+  inner_join(dxa_data) %>%
+  inner_join(hb_data) %>% 
+  view()
 
 
 ```
+
+
