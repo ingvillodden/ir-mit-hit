@@ -25,9 +25,11 @@ library(jtools)
 
 ```
 
-## Importing and preparing test data
+## Importing and preparing test data from MIT, HIT, and CON
 
 ```{r}
+
+# In this code chunk all test data is imported and formatted
 
 # Importing data
 cycling_data <-
@@ -140,4 +142,344 @@ pre_intervention_data <-
 
 ```
 
+### Importing oxygen consumption (VO2) data from sessions in MIT and HIT
+
+```{r}
+
+# # In this code chunk a file combining all the vo2 session data from individual 
+# files to one file are made
+
+
+# List all files in the data folder
+files <- list.files("data/vo2_sessions_ir/")
+
+# Make a list to store imports
+file.list <- list()
+
+# Loop over the list of files and read individual files
+for(i in 1:length(files)) {
+  
+ file.list[[i]] <- read_excel(paste0("data/vo2_sessions_ir/", files[i]), 
+                              na = "na")
+
+}
+
+file.list
+
+# Bind all files together
+vo2_data <- bind_rows(file.list)
+
+
+## Save imported data in one file
+saveRDS(vo2_data, "data/derivedData/vo2-session-ir-data.RDS")
+
+
+
+
+```
+
+# Preparing VO2 data from sessions MIT and HIT
+
+```{r}
+
+# In this code chunk the VO2 data is loaded, new variables are created, and the
+# VO2 data is combined with the session data
+
+# Loading data
+vo2_data <- readRDS("data/derivedData/vo2-session-ir-data.RDS")
+
+# Preparing pre-test data that will be used to calculate new variables
+pre_data <- pre_post_data %>% 
+  select(id, period, timepoint, bodymass, vo2.max, hr.max, w.max) %>% 
+  filter(timepoint == "pre") %>% 
+  print()
+
+# Calculating average total power input per session
+sessions_pi <- pre_data %>% 
+  inner_join(vo2_data) %>% 
+  filter(!is.na(vo2)) %>%
+  mutate(pi = ((vo2/1000/60) * (rer * 4840 + 16890))/1000) %>%
+  group_by(id, period, session) %>% 
+  summarise(pi = mean(pi, na.rm = TRUE)) %>% # Now in kJ/sec
+  # Multiply with number of seconds = total kgJoul per session
+  pivot_wider(values_from = pi, names_from = session) %>% 
+  mutate("1" = NA,
+         "2" = `2`,
+         "3" = NA, 
+         "4" = NA,
+         "5" = `5`,
+         "6" = `6`) %>% 
+select(id, period, "1", "2", "3", "4", "5", "6") %>% 
+  pivot_longer(names_to = "session",
+               values_to = "pi", 
+               cols = "1":"6") %>% 
+  print() 
+
+sessions_pi_mit <- sessions_pi %>% 
+  filter(period == "mit") %>% 
+  mutate(pi.total.kj = pi*4320) %>% # PI in kJ/sec * total duration of work 
+  # intervals in sec = total PI in kJ
+  group_by(id, period, session) %>% 
+  summarise(pi.total.kj = mean(pi.total.kj, na.rm = TRUE)) %>%
+  print()
+
+sessions_pi_hit <- sessions_pi %>% 
+  filter(period == "hit") %>% 
+  mutate(pi.total.kj = pi*2625) %>% # PI in kJ/sec * total duration of work 
+  # intervals in sec = total PI in kJ
+  group_by(id, period, session) %>% 
+  summarise(pi.total.kj = mean(pi.total.kj, na.rm = TRUE)) %>%
+  print()
+
+sessions_total_pi <- sessions_pi_mit %>% 
+  full_join(sessions_pi_hit) %>% 
+  print()
+
+# Average VO2 (ml/min) per session
+sessions_vo2 <- pre_data %>% 
+  inner_join(vo2_data) %>% 
+  filter(!is.na(vo2)) %>%
+  group_by(id, period, session) %>% 
+  summarise(vo2 = mean(vo2, na.rm = TRUE)) %>% 
+  pivot_wider(values_from = vo2, names_from = session) %>% 
+  mutate("1" = NA,
+         "2" = `2`,
+         "3" = NA, 
+         "4" = NA,
+         "5" = `5`,
+         "6" = `6`) %>% 
+  select(id, period, "1", "2", "3", "4", "5", "6") %>% 
+  pivot_longer(names_to = "session",
+               values_to = "vo2", 
+               cols = "1":"6") %>% 
+  print()
+
+# Average VO2 (ml/min/kg) per session
+sessions_vo2.kg <- pre_data %>% 
+  inner_join(vo2_data) %>% 
+  filter(!is.na(vo2)) %>%
+  mutate(vo2.kg = (vo2 / bodymass)) %>% 
+  group_by(id, period, session) %>%
+  summarise(vo2.kg = mean(vo2.kg, na.rm = TRUE)) %>% 
+  pivot_wider(values_from = vo2.kg, names_from = session) %>% 
+  mutate("1" = NA,
+         "2" = `2`,
+         "3" = NA, 
+         "4" = NA,
+         "5" = `5`,
+         "6" = `6`) %>% 
+  select(id, period, "1", "2", "3", "4", "5", "6") %>% 
+  pivot_longer(names_to = "session",
+               values_to = "vo2.kg", 
+               cols = "1":"6") %>% 
+  print()
+
+# Average % of VO2max per session
+sessions_rel.vo2 <- pre_data %>% 
+  inner_join(vo2_data) %>% 
+  filter(!is.na(vo2)) %>%
+  mutate(rel.vo2 = 100 * (vo2 / vo2.max)) %>% 
+  group_by(id, period, session) %>%
+  summarise(rel.vo2 = mean(rel.vo2, na.rm = TRUE)) %>% 
+  pivot_wider(values_from = rel.vo2, names_from = session) %>% 
+  mutate("1" = NA,
+         "2" = `2`,
+         "3" = NA, 
+         "4" = NA,
+         "5" = `5`,
+         "6" = `6`) %>% 
+  select(id, period, "1", "2", "3", "4", "5", "6") %>% 
+  pivot_longer(names_to = "session",
+               values_to = "rel.vo2", 
+               cols = "1":"6") %>% 
+  print()
+
+# Average time spent at or over 90% of VO2max per session
+sessions_vo2.90 <- pre_data %>% 
+  inner_join(vo2_data) %>% 
+  filter(!is.na(vo2)) %>% 
+  mutate(sec.90.vo2 = if_else((100 * (vo2 / vo2.max)) >= 90, 10, 0)) %>% 
+  group_by(id, period, session) %>%
+  summarise(sec.90.vo2 = sum(sec.90.vo2, na.rm = TRUE)) %>% 
+  pivot_wider(values_from = sec.90.vo2, names_from = session) %>% 
+  mutate("1" = NA,
+         "2" = `2`,
+         "3" = NA, 
+         "4" = NA,
+         "5" = `5`,
+         "6" = `6`) %>% 
+  select(id, period, "1", "2", "3", "4", "5", "6") %>% 
+  pivot_longer(names_to = "session",
+               values_to = "sec.90.vo2", 
+               cols = "1":"6") %>% 
+  print()
+
+# Average time spent at or over 90% of HRmax per session
+sessions_hr.90 <- pre_data %>% 
+  inner_join(vo2_data) %>% 
+  filter(!is.na(vo2)) %>% 
+  mutate(sec.90.hr = if_else((100 * (hr / hr.max)) >= 90, 10, 0)) %>% 
+  group_by(id, period, session) %>%
+  summarise(sec.90.hr = sum(sec.90.hr, na.rm = TRUE)) %>% 
+  pivot_wider(values_from = sec.90.hr, names_from = session) %>% 
+  mutate("1" = NA,
+         "2" = `2`,
+         "3" = NA, 
+         "4" = NA,
+         "5" = `5`,
+         "6" = `6`) %>% 
+  select(id, period, "1", "2", "3", "4", "5", "6") %>% 
+  pivot_longer(names_to = "session",
+               values_to = "sec.90.hr", 
+               cols = "1":"6") %>% 
+  print()
+
+
+
+# Loading and preparing data from all sessions
+sessions_ir_data <- read_excel("data/sessions_ir_data.xlsx", na = "na") %>% print()
+sessions_ir_data$session <- as.character(sessions_ir_data$session)
+
+all_sessions_data <- sessions_ir_data %>%
+  inner_join(pre_data) %>% 
+  mutate(rpe = rowMeans(sessions_ir_data[, c("rpe.1","rpe.2", "rpe.3", "rpe.4", 
+                                             "rpe.5", "rpe.6", "rpe.7")], 
+                        na.rm = TRUE)) %>%
+  mutate(pr = rowMeans(sessions_ir_data[, c("pr.1","pr.2", "pr.3", "pr.4", 
+                                            "pr.5", "pr.6", "pr.7")], 
+                       na.rm = TRUE)) %>%
+  mutate(la = rowMeans(sessions_ir_data[, c("la.1","la.2", "la.3", "la.4", 
+                                            "la.5", "la.6", "la.7")], 
+                       na.rm = TRUE)) %>%
+  mutate(hr = rowMeans(sessions_ir_data[, c("hr.1","hr.2", "hr.3", "hr.4", 
+                                            "hr.5", "hr.6", "hr.7")], 
+                       na.rm = TRUE)) %>%
+  mutate(rel.hr = 100 * (hr / hr.max)) %>% 
+  mutate(w = rowMeans(sessions_ir_data[, c("watt.1","watt.2", "watt.3", "watt.4", 
+                                           "watt.5", "watt.6", "watt.7")], 
+                      na.rm = TRUE)) %>%
+  mutate(rel.w = (w /bodymass)) %>% 
+  mutate(p.w = 100 * (w / w.max)) %>% 
+  select(id, period, session, s.rpe, rpe, pr, la, hr, rel.hr, w, rel.w, p.w) %>% 
+  group_by(id, period, session) %>%
+  print()
+
+
+
+# Combining the sessions data set with the vo2 session data set 
+sessions_data <- all_sessions_data %>%
+  inner_join(sessions_pi) %>%
+  inner_join(sessions_total_pi) %>% 
+  inner_join(sessions_vo2.kg) %>%   
+  inner_join(sessions_rel.vo2) %>% 
+  inner_join(sessions_vo2.90) %>%
+  inner_join(sessions_hr.90) %>% 
+  print()
+
+```
+
+
+#### Preparing selected data for analyses
+
+```{r}
+
+# In this code chunk "pre_post_data" is formatted to fit later analyses
+
+# Changing pre and post data from wide to long format, and calculating absolute change
+responses_data <- pre_post_data %>%  
+  select(id, period, timepoint, bodymass, w.rel.max, w.rel.4mmol, w.rel.15tt, index, 
+         w.rel.mean.10sec, vo2.rel.max, p.vo2.4mmol, p.vo2.15tt, ge.3.fresh, ge.3.tired) %>% 
+  pivot_longer(names_to = "variable",
+               values_to = "value",
+               cols = bodymass:ge.3.tired) %>% 
+  pivot_wider(names_from = timepoint,
+              values_from = value) %>% 
+  mutate(change = (post - pre)) %>% 
+  mutate(p.change = ((post - pre)/pre)*100) %>% 
+  print()
+
+# PO 15min at pre-test in all blocks. Will be used as an independent variable later.
+w.rel.15tt_data <- pre_post_data %>%  
+  select(id, period, timepoint, w.rel.15tt) %>% 
+  filter(timepoint == "pre") %>%
+  select(id, period, w.rel.15tt) %>% 
+  print()
+
+# %VO2max@4mmol at pre-test in all blocks. Will be used as an independent variable later.
+p.vo2.4mmol_data <- pre_post_data %>%  
+  select(id, period, timepoint, p.vo2.4mmol) %>% 
+  filter(timepoint == "pre") %>%
+  select(id, period, p.vo2.4mmol) %>% 
+  print()
+
+# ge.3.fresh at pre-test in all blocks. Will be used as an independent variable later.
+ge.3.fresh_data <- pre_post_data %>%  
+  select(id, period, timepoint, ge.3.fresh) %>% 
+  filter(timepoint == "pre") %>%
+  select(id, period, ge.3.fresh) %>% 
+  print()
+
+# ge.2.fresh at pre-test in all blocks. Will be used as an independent variable later.
+ge.2.fresh_data <- pre_post_data %>%  
+  select(id, period, timepoint, ge.2.fresh) %>% 
+  filter(timepoint == "pre") %>%
+  select(id, period, ge.2.fresh) %>% 
+  print()
+
+# VO2max at pre-test in all blocks. Will be used as an independent variable later.
+vo2.rel.max_data <- pre_post_data %>%  
+  select(id, period, timepoint, vo2.rel.max) %>% 
+  filter(timepoint == "pre") %>%
+  select(id, period, vo2.rel.max) %>% 
+  print()
+
+# VO2max at pre-test in all blocks. Will be used as an independent variable later.
+peak.torque.60_data <- pre_post_data %>%  
+  select(id, period, timepoint, peak.torque.60) %>% 
+  filter(timepoint == "pre") %>%
+  select(id, period, peak.torque.60) %>% 
+  print()
+
+
+# Calculating changes in body mass. Will be used as a co-variate later.
+bodymass_data  <- pre_post_data %>%  
+  select(id, period, timepoint, bodymass) %>% 
+  pivot_wider(names_from = timepoint,
+              values_from = bodymass) %>% 
+  mutate("change.bodymass" = (post - pre)) %>% 
+  select(id, period, change.bodymass) %>%  
+  print()
+
+
+pre_data <- pre_intervention_data %>% # husk bmi, fat.free.mass.whole, p.body.fat
+  select(id, w.rel.40tt, hbmass.kg, bv.kg, lat.avg, interm.avg) %>%
+  print()
+
+training_data <- sessions_data %>% 
+  select(id, period, rel.vo2, rel.hr, sec.90.vo2, sec.90.hr, pi.total.kj) %>% 
+  group_by(id, period) %>% 
+  summarise(rel.vo2 = mean(rel.vo2, na.rm = TRUE),
+            rel.hr = mean(rel.hr, na.rm = TRUE),
+            sec.90.vo2 = mean(sec.90.vo2, na.rm = TRUE),
+            sec.90.hr = mean(sec.90.hr, na.rm = TRUE),
+            pi.total.kj = mean(pi.total.kj, na.rm = TRUE)) %>% 
+  print()
+  
+# MÅ ENDRE DXA OG ULTRALYD TIL dbl
+
+# Combine all data sets
+data <- responses_data %>% 
+  inner_join(w.rel.15tt_data) %>%
+  inner_join(p.vo2.4mmol_data) %>%
+  inner_join(ge.3.fresh_data) %>%
+  inner_join(ge.2.fresh_data) %>%
+  inner_join(vo2.rel.max_data) %>%
+  inner_join(peak.torque.60_data) %>%
+  inner_join(bodymass_data) %>%
+  inner_join(pre_data) %>% 
+  full_join(training_data) %>% 
+  print()
+
+
+```
 

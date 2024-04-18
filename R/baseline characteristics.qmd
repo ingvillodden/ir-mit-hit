@@ -1,0 +1,70 @@
+---
+title: "baseline characteristics"
+format: html
+editor: visual
+editor_options: 
+  chunk_output_type: console
+---
+
+#### Baseline characteristics starting the intervention
+
+```{r}
+
+# In this code chunk each of the 44 individual participant´s first test in the 
+# in the intervention is found (based on the code list), and then mean baseline 
+# characteristics of the participants are calculated
+
+# Participants who´s first test was the pre test in CON
+# 
+baseline_con <- pre_post_data %>%
+  filter(period == "con", timepoint == "pre", !id %in% c("18", "20", "40")) %>%
+  print()
+
+# Participants who´s first test was the pre test in MIT
+baseline_mit <- pre_post_data %>% 
+  filter(period == "con", timepoint == "pre", 
+         !id %in% c("3", "8", "15", "16", "21", "36", "42")) %>%
+  print()
+
+
+# Calculating baseline characteristics
+baseline <- baseline_con %>%
+  inner_join(baseline_mit) %>%
+  summarise(across(c(age, bodymass, bodyheight, vo2.rel.max), 
+                   list(m = mean, s = sd), na.rm = TRUE)) %>%
+  print()
+
+```
+
+#### Training history
+
+```{r}
+
+# In this code chunk the participants average training history before the 
+# intervention is calculated
+
+
+training_history <-read_excel("data/training_history_ir_data.xlsx", na = "na") %>% 
+       summarise(active.years.m = mean(active.years, na.rm = TRUE),
+                  active.years.s = sd(active.years, na.rm = TRUE)) %>% print()
+
+
+```
+
+#### Temperature at all prolonged cycling tests
+
+```{r}
+
+# In this code chunk the ambient temperature at all prolonged cycling tests
+# is calculated
+
+temp.tests <-
+  cycling_data %>%
+  select(id, temperature.start) %>% 
+  summarise(temp.m = mean(temperature.start, na.rm = TRUE),
+            temp.s = sd(temperature.start, na.rm = TRUE)) %>% 
+  print()
+
+```
+
+

@@ -1,0 +1,55 @@
+---
+title: "relationship ir mit hit"
+format: html
+editor: visual
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r}
+
+# In this code chunk simple linear models are made to investigate whether there
+# is a relationship between the observed individual responses/outcomes/changes
+# for the 22 participants in the MIT block and the HIT block for all 
+# investigated outcome variables. More over, ICC scores are computed to 
+# investigate the reliability of the changes in outcome variables between blocks
+
+
+# Performance index
+
+# Formatting data to fit analyses
+relation_data <- data %>%
+  filter(period != "con") %>% 
+  filter(variable == "index") %>% 
+  select(id, period, change) %>% 
+  pivot_wider(names_from = period,
+              values_from = change) %>% 
+  subset(select = -id) %>%
+  print()
+
+
+mod <- lm(hit ~ mit, data = relation_data) 
+summ(mod, confint = TRUE, digits = 3)
+
+# ICC score
+icc <- ICC(relation_data, alpha=.05, missing = TRUE) %>%  print()
+
+# Printing linear model
+fig <- ggplot(relation_data, aes(x=hit, y=mit)) +
+  geom_point() +
+  geom_smooth(method="lm", colour = "black") +
+  theme_pubr() +
+  scale_y_continuous(breaks=seq(-0.01, 0.12, 0.02)) + 
+  scale_x_continuous(breaks=seq(-0.01, 0.06, 0.02)) + 
+  labs(x = "HIT ∆ performance index (AU)", y = "MIT ∆ performance index (AU)") +
+  theme(text=element_text(family="serif", face="plain", size=11))
+fig
+
+
+
+
+
+
+
+```
+
