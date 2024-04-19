@@ -6,6 +6,8 @@ editor_options:
   chunk_output_type: console
 ---
 
+#### Relationship between individual observed responses to MIT and HIT 
+
 ```{r}
 
 # In this code chunk simple linear models are made to investigate whether there
@@ -15,7 +17,7 @@ editor_options:
 # investigate the reliability of the changes in outcome variables between blocks
 
 
-# Performance index
+## Performance index
 
 # Formatting data to fit analyses
 relation_data <- data %>%
@@ -28,7 +30,7 @@ relation_data <- data %>%
   print()
 
 
-mod <- lm(hit ~ mit, data = relation_data) 
+mod <- lm(mit ~ hit, data = relation_data) 
 summ(mod, confint = TRUE, digits = 3)
 
 # ICC score
@@ -41,15 +43,166 @@ fig <- ggplot(relation_data, aes(x=hit, y=mit)) +
   theme_pubr() +
   scale_y_continuous(breaks=seq(-0.01, 0.12, 0.02)) + 
   scale_x_continuous(breaks=seq(-0.01, 0.06, 0.02)) + 
-  labs(x = "HIT ∆ performance index (AU)", y = "MIT ∆ performance index (AU)") +
+  labs(x = "HIT ∆ performance index (AU)", 
+       y = "MIT ∆ performance index (AU)") +
   theme(text=element_text(family="serif", face="plain", size=11))
 fig
 
 
+## PO15min
+
+relation_data <- data %>%
+  filter(period != "con") %>% 
+  filter(variable == "w.rel.15tt") %>% 
+  select(id, period, change) %>% 
+  pivot_wider(names_from = period,
+              values_from = change) %>% 
+  subset(select = -id) %>%
+  print()
+
+mod <- lm(mit ~ hit, data = relation_data) 
+summ(mod, confint = TRUE, digits = 3)
+
+icc <- ICC(relation_data, alpha=.05, missing = TRUE) %>%  print()
+
+fig <- ggplot(relation_data, aes(x=hit, y=mit)) +
+  geom_point() +
+  geom_smooth(method="lm", colour = "black") +
+  theme_pubr() +
+  labs(x = expression("HIT   ∆ PO"["@15min"]*"  ( W ∙ kg"^-1*") "), 
+       y = expression("MIT   ∆ PO"["@15min"]*"  ( W ∙ kg"^-1*") ")) +
+  theme(text=element_text(family="serif", face="plain", size=11))
+fig
 
 
+## pVO2max
+
+relation_data <- data %>%
+  filter(period != "con") %>% 
+  filter(variable == "w.rel.max") %>% 
+  select(id, period, change) %>% 
+  pivot_wider(names_from = period,
+              values_from = change) %>% 
+  subset(select = -id) %>%
+  print()
+
+mod <- lm(mit ~ hit, data = relation_data) 
+summ(mod, confint = TRUE, digits = 3)
+
+icc <- ICC(relation_data, alpha=.05, missing = TRUE) %>%  print()
+
+fig <- ggplot(relation_data, aes(x=hit, y=mit)) +
+  geom_point() +
+  geom_smooth(method="lm", colour = "black") +
+  theme_pubr() +
+  labs(x = expression("HIT   ∆ pVO"["2max"]*"  ( W ∙ kg"^-1*") "), 
+       y = expression("MIT   ∆ pVO"["2max"]*"  ( W ∙ kg"^-1*") ")) +
+  theme(text=element_text(family="serif", face="plain", size=11))
+fig
 
 
+## PO4mmol
+
+relation_data <- data %>%
+  filter(period != "con") %>% 
+  filter(variable == "w.rel.4mmol") %>% 
+  select(id, period, change) %>% 
+  pivot_wider(names_from = period,
+              values_from = change) %>% 
+  subset(select = -id) %>%
+  print()
+
+mod <- lm(mit ~ hit, data = relation_data) 
+summ(mod, confint = TRUE, digits = 3)
+
+icc <- ICC(relation_data, alpha=.05, missing = TRUE) %>%  print()
+
+fig <- ggplot(relation_data, aes(x=hit, y=mit)) +
+  geom_point() +
+  geom_smooth(method="lm", colour = "black") +
+  theme_pubr() +
+  labs(x = expression("HIT   ∆ PO"["4mmol"]*"  ( W ∙ kg"^-1*") "), 
+       y = expression("MIT   ∆ PO"["4mmol"]*"  ( W ∙ kg"^-1*") ")) +
+  theme(text=element_text(family="serif", face="plain", size=11))
+fig
+
+
+## VO2max
+
+relation_data <- data %>%
+  filter(period != "con") %>% 
+  filter(variable == "vo2.rel.max") %>% 
+  select(id, period, change) %>% 
+  pivot_wider(names_from = period,
+              values_from = change) %>% 
+  subset(select = -id) %>%
+  print()
+
+mod <- lm(mit ~ hit, data = relation_data) 
+summ(mod, confint = TRUE, digits = 3)
+
+icc <- ICC(relation_data, alpha=.05, missing = TRUE) %>%  print()
+
+fig <- ggplot(relation_data, aes(x=hit, y=mit)) +
+  geom_point() +
+  geom_smooth(method="lm", colour = "black") +
+  theme_pubr() +
+  labs(x = expression("HIT   ∆ VO"["2max"]*"  ( mL ∙ min"^-1*" ∙ kg"^-1*") "), 
+       y = expression("MIT   ∆ VO"["2max"]*"  ( mL ∙ min"^-1*" ∙ kg"^-1*") ")) +
+  theme(text=element_text(family="serif", face="plain", size=11))
+fig
+
+
+## % of VO2max at 4mmol [LA-]
+
+relation_data <- data %>%
+  filter(period != "con") %>% 
+  filter(variable == "p.vo2.4mmol") %>% 
+  select(id, period, change) %>% 
+  pivot_wider(names_from = period,
+              values_from = change) %>% 
+  subset(select = -id) %>%
+  print()
+
+mod <- lm(mit ~ hit, data = relation_data) 
+summ(mod, confint = TRUE, digits = 3)
+
+icc <- ICC(relation_data, alpha=.05, missing = TRUE) %>%  print()
+
+fig <- ggplot(relation_data, aes(x=hit, y=mit)) +
+  geom_point() +
+  geom_smooth(method="lm", colour = "black") +
+  theme_pubr() +
+  labs(x = expression("HIT   ∆ % of VO"["2max"]*"  ( %-points) "), 
+       y = expression("MIT   ∆ % of VO"["2max"]*"  ( %-points) ")) +
+  theme(text=element_text(family="serif", face="plain", size=11))
+fig
+
+
+## GE (at the 3.last bout of the blood lactate profile in the fresh state)
+
+relation_data <- data %>%
+  filter(period != "con") %>% 
+  filter(variable == "ge.3.fresh") %>% 
+  select(id, period, change) %>% 
+  pivot_wider(names_from = period,
+              values_from = change) %>% 
+  subset(select = -id) %>%
+  print()
+
+mod <- lm(mit ~ hit, data = relation_data) 
+summ(mod, confint = TRUE, digits = 3)
+
+icc <- ICC(relation_data, alpha=.05, missing = TRUE) %>%  print()
+
+fig <- ggplot(relation_data, aes(x=hit, y=mit)) +
+  geom_point() +
+  geom_smooth(method="lm", colour = "black") +
+  theme_pubr() +
+  labs(x = "HIT   ∆ GE (%-points)", 
+       y = "MIT   ∆ GE (%-points)") +
+  theme(text=element_text(family="serif", face="plain", size=11))
+fig
 
 ```
 

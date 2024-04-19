@@ -1,0 +1,84 @@
+---
+title: "prediction ir mit hit"
+format: html
+editor: visual
+editor_options: 
+  chunk_output_type: console
+---
+
+
+#### Predicting individual responses to a MIT block and a HIT block: Mechanisms/characteristics underlying individual response variability
+```{r}
+
+# In this code chunk data is prepared for predictive/interaction analyses
+
+
+```
+
+
+#### % of VO2max during sessions 
+```{r}
+
+# In this code chunk 
+
+
+mod <- data %>%
+  filter(period != "con", variable == "index") %>%
+  lmer(change ~ period * rel.vo2 + pre + (1 | id), data = .) %>%
+  summ(confint = TRUE, digits = 3) %>% 
+  print()
+
+mod <- data %>%
+  filter(period != "con", variable == "w.rel.15tt") %>%
+  lmer(change ~ period * rel.vo2 + pre + (1 | id), data = .) %>%
+  summ(confint = TRUE, digits = 3) %>% 
+  print()
+
+mod <- data %>%
+  filter(period != "con", variable == "w.rel.max") %>%
+  lmer(change ~ period * rel.vo2 + pre + (1 | id), data = .) %>%
+  summ(confint = TRUE, digits = 3) %>% 
+  print()
+
+mod <- data %>%
+  filter(period != "con", variable == "w.rel.4mmol") %>%
+  lmer(change ~ period * rel.vo2 + pre + (1 | id), data = .) %>%
+  summ(confint = TRUE, digits = 3) %>% 
+  print()
+
+mod <- data %>%
+  filter(period != "con", variable == "vo2.rel.max") %>%
+  lmer(change ~ period * rel.vo2 + pre + (1 | id), data = .) %>%
+  summ(confint = TRUE, digits = 3) %>% 
+  print()
+
+mod <- data %>%
+  filter(period != "con", variable == "p.vo2.4mmol") %>%
+  lmer(change ~ period * rel.vo2 + pre + (1 | id), data = .) %>%
+  summ(confint = TRUE, digits = 3) %>% 
+  print()
+
+mod <- data %>%
+  filter(period != "con", variable == "ge.3.fresh") %>%
+  lmer(change ~ period * rel.vo2 + pre + (1 | id), data = .) %>%
+  summ(confint = TRUE, digits = 3) %>% 
+  print()
+
+
+
+figure <- data %>% 
+  filter(period != "con", variable == "w.rel.15tt") %>%
+  ggplot(aes(x=rel.vo2, y=change, color=period)) +
+  geom_point() +
+  geom_smooth(method="lm", se=TRUE, level = 0.95) + # se = confidence intervals
+  theme_pubr() +
+  labs(x = "% VO2max sessions", y = "Change VO2max") +
+  theme(text=element_text(family="serif", face="plain", size=11))
+figure
+
+
+
+```
+
+
+

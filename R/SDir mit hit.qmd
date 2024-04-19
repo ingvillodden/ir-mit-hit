@@ -1,0 +1,272 @@
+---
+title: "SDir mit hit"
+format: html
+editor: visual
+editor_options: 
+  chunk_output_type: console
+---
+
+#### Interindividual differences in training responsiveness (SDir) 
+```{r}
+
+# In this code chunk data is prepared to calculate SDir for the MIT and HIT block using the control group
+
+# About SDir:
+# The presence of a separate, independent control group provides an estimate of the variability because of the exercise intervention (15). Involving a control group allows estimating the magnitude of interindividual variability in the absence of exercise training and is essential to know whether the interindividual variability in the presence of exercise training is indeed due to the training (8,16,17). The variability in change scores in the control group is subtracted from the variability in change scores in the exercise group to obtain the true variability in change scores between individuals, according to the following formula:
+#〖SD〗_true=√(〖〖SD〗_intervention〗^2 )-〖〖SD〗_control〗^2
+# Where SDtrue is the true interindividual variability in response to the intervention, SDexerc is the observed interindividual variability in change scores in the exercise group, and SDcontrol is the observed interindividual variability in change scores in the control group 
+
+
+# Preparing data for analyses
+SDir_all_data <- data %>% 
+  group_by(period, variable) %>% 
+  summarise(across(c(change, pre), list(m = mean, s = sd), na.rm = TRUE)) %>% 
+  pivot_wider(names_from = period, values_from = c(change_m, change_s, pre_m, pre_s)) %>%
+  print()
+
+
+
+
+```
+
+##### Performance index
+```{r}
+
+# Selecting outcome variable
+SDir_data <- SDir_all_data %>% filter(variable == "index") %>% print()
+
+# Smallest worthwhile change (SWC)
+swc <- SDir_data %>% summarise(swc = pre_s_con*0.2) %>%  print()
+  
+# SDir for the MIT and HIT block
+SDir_mit <- 
+  sqrt(SDir_data$change_s_mit^2 - SDir_data$change_s_con^2) %>% print()
+
+SDir_hit <- sqrt(SDir_data$change_s_con^2 - SDir_data$change_s_hit^2) %>% print() # SD con larger than SD hit. Add minus in manuscript
+
+# CI (95%) for SDir MIT
+# Calculating standard error (se) to use in CI calculations
+standard_error <- sqrt(2* ( ((SDir_data$change_s_mit^4)/ (18-1)) + 
+                              ((SDir_data$change_s_con^4)/ (18-1)) ) ) %>% print()
+
+confint_upper_mit <- sqrt((SDir_mit^2) + (1.96 * standard_error)) %>% print() 
+confint_lower_mit <- sqrt(sqrt(((SDir_mit^2) - (1.96 * standard_error))^2)) %>% print() # Add minus in manuscript
+
+# Comment to the code:
+# Cannot take the square root of a negative value (SDir^2 - 1.96*standard error = a negative value).
+# Solve this by squaring the negative value, and then taking the square root of this value = the same value, just positive
+# Can then take the square root of SDir^2 - 1.96*standard error
+# Add minus when reporting in manuscript
+# This applies for all other calculated lower CI with that are (see comments "# Add minus in manuscript")
+
+
+
+# CI (95%) for SDir HIT
+standard_error <- sqrt(2* ( ((SDir_data$change_s_hit^4)/ (17-1)) + 
+                              ((SDir_data$change_s_con^4)/ (18-1)) ) ) %>% print()
+# n = 17 in HIT as one participant did not complete the 15min cycling trial, which is part of the index
+
+confint_upper_hit <- sqrt(-(SDir_hit^2) + (1.96 * standard_error)) %>% print()
+confint_lower_hit <- sqrt(sqrt((-((SDir_hit)^2) - (1.96 * standard_error))^2)) %>% print() 
+# Add minus in manuscript
+
+# Comment to the code:
+# See comment above.
+# Additionally, as the SDir for HIT is negative, this is added in the equation for the calculation of
+# both the upper and lower CI
+# This applies for all calculations done with a negative SDir
+
+```
+
+##### PO15min
+```{r}
+
+# Selecting outcome variable
+SDir_data <- SDir_all_data %>% filter(variable == "w.rel.15tt") %>% print()
+
+# Smallest worthwhile change (SWC)
+swc <- SDir_data %>% summarise(swc = pre_s_con*0.2) %>%  print()
+  
+# SDir for the MIT and HIT block
+SDir_mit <- sqrt(SDir_data$change_s_con^2 - SDir_data$change_s_mit^2) %>% print() # Add minus in manuscript
+
+SDir_hit <- sqrt(SDir_data$change_s_con^2 - SDir_data$change_s_hit^2) %>% print() # Add minus in manuscript
+
+# CI (95%) for SDir MIT
+standard_error <- sqrt(2* ( ((SDir_data$change_s_mit^4)/ (18-1)) + 
+                              ((SDir_data$change_s_con^4)/ (18-1)) ) ) %>% print()
+
+confint_upper_mit <- sqrt(-(SDir_mit^2) + (1.96 * standard_error)) %>% print() 
+confint_lower_mit <- sqrt(sqrt((-(SDir_mit^2) - (1.96 * standard_error))^2)) %>% print() #Add minus in manuscript
+
+# CI (95%) for SDir HIT
+standard_error <- sqrt(2* ( ((SDir_data$change_s_hit^4)/ (17-1)) + 
+                              ((SDir_data$change_s_con^4)/ (18-1)) ) ) %>% print()
+# n = 17 in HIT as one participant did not complete the 15min cycling trial, which is part of the index
+
+confint_upper_hit <- sqrt(-(SDir_hit^2) + (1.96 * standard_error)) %>% print()
+confint_lower_hit <- sqrt(sqrt((-(SDir_hit^2) - (1.96 * standard_error))^2)) %>% print() # Add minus in manuscript
+
+
+```
+
+##### pVO2max
+```{r}
+
+# Selecting outcome variable
+SDir_data <- SDir_all_data %>% filter(variable == "w.rel.max") %>% print()
+
+# Smallest worthwhile change (SWC)
+swc <- SDir_data %>% summarise(swc = pre_s_con*0.2) %>%  print()
+  
+# SDir for the MIT and HIT block
+SDir_mit <- sqrt(SDir_data$change_s_mit^2 - SDir_data$change_s_con^2) %>% print() 
+
+SDir_hit <- sqrt(SDir_data$change_s_con^2 - SDir_data$change_s_hit^2) %>% print() # Add minus in manuscript
+
+# CI (95%) for SDir MIT
+standard_error <- sqrt(2* ( ((SDir_data$change_s_mit^4)/ (18-1)) + 
+                              ((SDir_data$change_s_con^4)/ (18-1)) ) ) %>% print()
+
+confint_upper_mit <- sqrt((SDir_mit^2) + (1.96 * standard_error)) %>% print() 
+confint_lower_mit <- sqrt(sqrt(((SDir_mit^2) - (1.96 * standard_error))^2)) %>% print() #Add minus in manuscript
+
+# CI (95%) for SDir HIT
+standard_error <- sqrt(2* ( ((SDir_data$change_s_hit^4)/ (18-1)) + 
+                              ((SDir_data$change_s_con^4)/ (18-1)) ) ) %>% print()
+# n = 17 in HIT as one participant did not complete the 15min cycling trial, which is part of the index
+
+confint_upper_hit <- sqrt(-(SDir_hit^2) + (1.96 * standard_error)) %>% print()
+confint_lower_hit <- sqrt(sqrt((-(SDir_hit^2) - (1.96 * standard_error))^2)) %>% print() # Add minus in manuscript
+
+
+```
+
+
+##### PO4mmol
+```{r}
+
+# Selecting outcome variable
+SDir_data <- SDir_all_data %>% filter(variable == "w.rel.4mmol") %>% print()
+
+# Smallest worthwhile change (SWC)
+swc <- SDir_data %>% summarise(swc = pre_s_con*0.2) %>%  print()
+  
+# SDir for the MIT and HIT block
+SDir_mit <- sqrt(SDir_data$change_s_mit^2 - SDir_data$change_s_con^2) %>% print() 
+
+SDir_hit <- sqrt(SDir_data$change_s_con^2 - SDir_data$change_s_hit^2) %>% print() # Add minus in manuscript
+
+# CI (95%) for SDir MIT
+standard_error <- sqrt(2* ( ((SDir_data$change_s_mit^4)/ (18-1)) + 
+                              ((SDir_data$change_s_con^4)/ (18-1)) ) ) %>% print()
+
+confint_upper_mit <- sqrt((SDir_mit^2) + (1.96 * standard_error)) %>% print() 
+confint_lower_mit <- sqrt(sqrt(((SDir_mit^2) - (1.96 * standard_error))^2)) %>% print() #Add minus in manuscript
+
+# CI (95%) for SDir HIT
+standard_error <- sqrt(2* ( ((SDir_data$change_s_hit^4)/ (18-1)) + 
+                              ((SDir_data$change_s_con^4)/ (18-1)) ) ) %>% print()
+# n = 17 in HIT as one participant did not complete the 15min cycling trial, which is part of the index
+
+confint_upper_hit <- sqrt(-(SDir_hit^2) + (1.96 * standard_error)) %>% print()
+confint_lower_hit <- sqrt(sqrt((-(SDir_hit^2) - (1.96 * standard_error))^2)) %>% print() # Add minus in manuscript
+
+
+```
+
+##### VO2max
+```{r}
+
+# Selecting outcome variable
+SDir_data <- SDir_all_data %>% filter(variable == "vo2.rel.max") %>% print()
+
+# Smallest worthwhile change (SWC)
+swc <- SDir_data %>% summarise(swc = pre_s_con*0.2) %>%  print()
+  
+# SDir for the MIT and HIT block
+SDir_mit <- sqrt(SDir_data$change_s_mit^2 - SDir_data$change_s_con^2) %>% print() 
+
+SDir_hit <- sqrt(SDir_data$change_s_hit^2 - SDir_data$change_s_con^2) %>% print() 
+
+# CI (95%) for SDir MIT
+standard_error <- sqrt(2* ( ((SDir_data$change_s_mit^4)/ (18-1)) + 
+                              ((SDir_data$change_s_con^4)/ (18-1)) ) ) %>% print()
+
+confint_upper_mit <- sqrt((SDir_mit^2) + (1.96 * standard_error)) %>% print() 
+confint_lower_mit <- sqrt(sqrt(((SDir_mit^2) - (1.96 * standard_error))^2)) %>% print() #Add minus in manuscript
+
+# CI (95%) for SDir HIT
+standard_error <- sqrt(2* ( ((SDir_data$change_s_hit^4)/ (18-1)) + 
+                              ((SDir_data$change_s_con^4)/ (18-1)) ) ) %>% print()
+
+confint_upper_hit <- sqrt((SDir_hit^2) + (1.96 * standard_error)) %>% print()
+confint_lower_hit <- sqrt(sqrt(((SDir_hit^2) - (1.96 * standard_error))^2)) %>% print() # Add minus in manuscript
+
+
+```
+
+##### % of VO2max at 4mmol/L [La-]
+```{r}
+
+# Selecting outcome variable
+SDir_data <- SDir_all_data %>% filter(variable == "p.vo2.4mmol") %>% print()
+
+# Smallest worthwhile change (SWC)
+swc <- SDir_data %>% summarise(swc = pre_s_con*0.2) %>%  print()
+  
+# SDir for the MIT and HIT block
+SDir_mit <- sqrt(SDir_data$change_s_mit^2 - SDir_data$change_s_con^2) %>% print() 
+
+SDir_hit <- sqrt(SDir_data$change_s_con^2 - SDir_data$change_s_hit^2) %>% print() #Add minus in manuscript
+
+# CI (95%) for SDir MIT
+standard_error <- sqrt(2* ( ((SDir_data$change_s_mit^4)/ (18-1)) + 
+                              ((SDir_data$change_s_con^4)/ (18-1)) ) ) %>% print()
+
+confint_upper_mit <- sqrt((SDir_mit^2) + (1.96 * standard_error)) %>% print() 
+confint_lower_mit <- sqrt(sqrt(((SDir_mit^2) - (1.96 * standard_error))^2)) %>% print() #Add minus in manuscript
+
+# CI (95%) for SDir HIT
+standard_error <- sqrt(2* ( ((SDir_data$change_s_hit^4)/ (18-1)) + 
+                              ((SDir_data$change_s_con^4)/ (18-1)) ) ) %>% print()
+
+confint_upper_hit <- sqrt(-(SDir_hit^2) + (1.96 * standard_error)) %>% print()
+confint_lower_hit <- sqrt(sqrt((-(SDir_hit^2) - (1.96 * standard_error))^2)) %>% print() # Add minus in manuscript
+
+
+```
+
+##### GE
+```{r}
+
+# Selecting outcome variable
+SDir_data <- SDir_all_data %>% filter(variable == "ge.3.fresh") %>% print()
+
+# Smallest worthwhile change (SWC)
+swc <- SDir_data %>% summarise(swc = pre_s_con*0.2) %>%  print()
+  
+# SDir for the MIT and HIT block
+SDir_mit <- sqrt(SDir_data$change_s_mit^2 - SDir_data$change_s_con^2) %>% print() 
+
+SDir_hit <- sqrt(SDir_data$change_s_hit^2 - SDir_data$change_s_con^2) %>% print() 
+
+# CI (95%) for SDir MIT
+standard_error <- sqrt(2* ( ((SDir_data$change_s_mit^4)/ (18-1)) + 
+                              ((SDir_data$change_s_con^4)/ (18-1)) ) ) %>% print()
+
+confint_upper_mit <- sqrt((SDir_mit^2) + (1.96 * standard_error)) %>% print() 
+confint_lower_mit <- sqrt(sqrt(((SDir_mit^2) - (1.96 * standard_error))^2)) %>% print() #Add minus in manuscript
+
+# CI (95%) for SDir HIT
+standard_error <- sqrt(2* ( ((SDir_data$change_s_hit^4)/ (18-1)) + 
+                              ((SDir_data$change_s_con^4)/ (18-1)) ) ) %>% print()
+
+confint_upper_hit <- sqrt((SDir_hit^2) + (1.96 * standard_error)) %>% print()
+confint_lower_hit <- sqrt(sqrt(((SDir_hit^2) - (1.96 * standard_error))^2)) %>% print() # Add minus in manuscript
+
+
+```
+
+
+
