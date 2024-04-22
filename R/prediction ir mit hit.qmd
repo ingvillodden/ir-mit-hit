@@ -15,12 +15,10 @@ editor_options:
 
 ```
 
+## Session characteristics
 
 #### % of VO2max during sessions 
 ```{r}
-
-# In this code chunk 
-
 
 mod <- data %>%
   filter(period != "con", variable == "index") %>%
@@ -67,18 +65,771 @@ mod <- data %>%
 
 
 figure <- data %>% 
-  filter(period != "con", variable == "w.rel.15tt") %>%
+  filter(period != "con", variable == "vo2.rel.max") %>%
   ggplot(aes(x=rel.vo2, y=change, color=period)) +
   geom_point() +
   geom_smooth(method="lm", se=TRUE, level = 0.95) + # se = confidence intervals
   theme_pubr() +
-  labs(x = "% VO2max sessions", y = "Change VO2max") +
+  labs(x = expression("% of VO"["2max"]*"  during interval sessions (%) "), y = expression("∆ VO"["2max"]*"  ( mL ∙ min"^-1*" ∙ kg"^-1*") ")) +
   theme(text=element_text(family="serif", face="plain", size=11))
 figure
 
+```
 
+#### Time > 90% of VO2max during sessions 
+```{r}
+
+mod <- data %>%
+  filter(period != "con", variable == "index") %>%
+  lmer(change ~ period * sec.90.vo2 + pre + (1 | id), data = .) %>%
+  summ(confint = TRUE, digits = 3) %>% 
+  print()
+
+mod <- data %>%
+  filter(period != "con", variable == "w.rel.15tt") %>%
+  lmer(change ~ period * sec.90.vo2 + pre + (1 | id), data = .) %>%
+  summ(confint = TRUE, digits = 3) %>% 
+  print()
+
+mod <- data %>%
+  filter(period != "con", variable == "w.rel.max") %>%
+  lmer(change ~ period * sec.90.vo2 + pre + (1 | id), data = .) %>%
+  summ(confint = TRUE, digits = 3) %>% 
+  print()
+
+mod <- data %>%
+  filter(period != "con", variable == "w.rel.4mmol") %>%
+  lmer(change ~ period * sec.90.vo2 + pre + (1 | id), data = .) %>%
+  summ(confint = TRUE, digits = 3) %>% 
+  print()
+
+mod <- data %>%
+  filter(period != "con", variable == "vo2.rel.max") %>%
+  lmer(change ~ period * sec.90.vo2 + pre + (1 | id), data = .) %>%
+  summ(confint = TRUE, digits = 3) %>% 
+  print()
+
+mod <- data %>%
+  filter(period != "con", variable == "p.vo2.4mmol") %>%
+  lmer(change ~ period * sec.90.vo2 + pre + (1 | id), data = .) %>%
+  summ(confint = TRUE, digits = 3) %>% 
+  print()
+
+mod <- data %>%
+  filter(period != "con", variable == "ge.3.fresh") %>%
+  lmer(change ~ period * sec.90.vo2 + pre + (1 | id), data = .) %>%
+  summ(confint = TRUE, digits = 3) %>% 
+  print()
+
+
+
+figure <- data %>% 
+  filter(period != "con", variable == "vo2.rel.max") %>%
+  ggplot(aes(x=sec.90.vo2, y=change, color=period)) +
+  geom_point() +
+  geom_smooth(method="lm", se=TRUE, level = 0.95) + 
+  theme_pubr() +
+  labs(x = expression("Time > 90% of VO"["2max"]*"  during interval sessions (%) "), y = expression("∆ VO"["2max"]*"  ( mL ∙ min"^-1*" ∙ kg"^-1*") ")) +
+  theme(text=element_text(family="serif", face="plain", size=11))
+figure
 
 ```
 
 
 
+## Whole body characteristics
+
+#### PO 40min cycling trial
+```{r}
+
+mod <- data %>%
+  filter(period != "con", variable == "index") %>%
+  lmer(change ~ period * w.rel.40tt + pre + (1 | id), data = .) %>%
+  summ(confint = TRUE, digits = 3) %>% 
+  print()
+
+mod <- data %>%
+  filter(period != "con", variable == "w.rel.15tt") %>%
+  lmer(change ~ period * w.rel.40tt + pre + (1 | id), data = .) %>%
+  summ(confint = TRUE, digits = 3) %>% 
+  print()
+
+mod <- data %>%
+  filter(period != "con", variable == "w.rel.max") %>%
+  lmer(change ~ period * w.rel.40tt + pre + (1 | id), data = .) %>%
+  summ(confint = TRUE, digits = 3) %>% 
+  print()
+
+mod <- data %>%
+  filter(period != "con", variable == "w.rel.4mmol") %>%
+  lmer(change ~ period * w.rel.40tt + pre + (1 | id), data = .) %>%
+  summ(confint = TRUE, digits = 3) %>% 
+  print()
+
+mod <- data %>%
+  filter(period != "con", variable == "vo2.rel.max") %>%
+  lmer(change ~ period * w.rel.40tt + pre + (1 | id), data = .) %>%
+  summ(confint = TRUE, digits = 3) %>% 
+  print()
+
+mod <- data %>%
+  filter(period != "con", variable == "p.vo2.4mmol") %>%
+  lmer(change ~ period * w.rel.40tt + pre + (1 | id), data = .) %>%
+  summ(confint = TRUE, digits = 3) %>% 
+  print()
+
+mod <- data %>%
+  filter(period != "con", variable == "ge.3.fresh") %>%
+  lmer(change ~ period * w.rel.40tt + pre + (1 | id), data = .) %>%
+  summ(confint = TRUE, digits = 3) %>% 
+  print()
+
+```
+
+#### PO 15min cycling trial
+```{r}
+
+mod <- data %>%
+  filter(period != "con", variable == "index") %>%
+  lmer(change ~ period * w.rel.15tt + pre + (1 | id), data = .) %>%
+  summ(confint = TRUE, digits = 3) %>% 
+  print()
+
+mod <- data %>%
+  filter(period != "con", variable == "w.rel.15tt") %>%
+  lmer(change ~ period * w.rel.15tt + pre + (1 | id), data = .) %>%
+  summ(confint = TRUE, digits = 3) %>% 
+  print()
+
+mod <- data %>%
+  filter(period != "con", variable == "w.rel.max") %>%
+  lmer(change ~ period * w.rel.15tt + pre + (1 | id), data = .) %>%
+  summ(confint = TRUE, digits = 3) %>% 
+  print()
+
+mod <- data %>%
+  filter(period != "con", variable == "w.rel.4mmol") %>%
+  lmer(change ~ period * w.rel.15tt + pre + (1 | id), data = .) %>%
+  summ(confint = TRUE, digits = 3) %>% 
+  print()
+
+mod <- data %>%
+  filter(period != "con", variable == "vo2.rel.max") %>%
+  lmer(change ~ period * w.rel.15tt + pre + (1 | id), data = .) %>%
+  summ(confint = TRUE, digits = 3) %>% 
+  print()
+
+mod <- data %>%
+  filter(period != "con", variable == "p.vo2.4mmol") %>%
+  lmer(change ~ period * w.rel.15tt + pre + (1 | id), data = .) %>%
+  summ(confint = TRUE, digits = 3) %>% 
+  print()
+
+mod <- data %>%
+  filter(period != "con", variable == "ge.3.fresh") %>%
+  lmer(change ~ period * w.rel.15tt + pre + (1 | id), data = .) %>%
+  summ(confint = TRUE, digits = 3) %>% 
+  print()
+
+```
+
+#### pVO2max at baseline
+```{r}
+
+mod <- data %>%
+  filter(period != "con", variable == "index") %>%
+  lmer(change ~ period * w.rel.max + pre + (1 | id), data = .) %>%
+  summ(confint = TRUE, digits = 3) %>% 
+  print()
+
+mod <- data %>%
+  filter(period != "con", variable == "w.rel.15tt") %>%
+  lmer(change ~ period * w.rel.max + pre + (1 | id), data = .) %>%
+  summ(confint = TRUE, digits = 3) %>% 
+  print()
+
+mod <- data %>%
+  filter(period != "con", variable == "w.rel.max") %>%
+  lmer(change ~ period * w.rel.max + pre + (1 | id), data = .) %>%
+  summ(confint = TRUE, digits = 3) %>% 
+  print()
+
+mod <- data %>%
+  filter(period != "con", variable == "w.rel.4mmol") %>%
+  lmer(change ~ period * w.rel.max + pre + (1 | id), data = .) %>%
+  summ(confint = TRUE, digits = 3) %>% 
+  print()
+
+mod <- data %>%
+  filter(period != "con", variable == "vo2.rel.max") %>%
+  lmer(change ~ period * w.rel.max + pre + (1 | id), data = .) %>%
+  summ(confint = TRUE, digits = 3) %>% 
+  print()
+
+mod <- data %>%
+  filter(period != "con", variable == "p.vo2.4mmol") %>%
+  lmer(change ~ period * w.rel.max + pre + (1 | id), data = .) %>%
+  summ(confint = TRUE, digits = 3) %>% 
+  print()
+
+mod <- data %>%
+  filter(period != "con", variable == "ge.3.fresh") %>%
+  lmer(change ~ period * w.rel.max + pre + (1 | id), data = .) %>%
+  summ(confint = TRUE, digits = 3) %>% 
+  print()
+
+```
+
+#### PO 4mmol/L [blood lactate]
+```{r}
+
+mod <- data %>%
+  filter(period != "con", variable == "index") %>%
+  lmer(change ~ period * w.rel.4mmol + pre + (1 | id), data = .) %>%
+  summ(confint = TRUE, digits = 3) %>% 
+  print()
+
+mod <- data %>%
+  filter(period != "con", variable == "w.rel.15tt") %>%
+  lmer(change ~ period * w.rel.4mmol + pre + (1 | id), data = .) %>%
+  summ(confint = TRUE, digits = 3) %>% 
+  print()
+
+mod <- data %>%
+  filter(period != "con", variable == "w.rel.max") %>%
+  lmer(change ~ period * w.rel.4mmol + pre + (1 | id), data = .) %>%
+  summ(confint = TRUE, digits = 3) %>% 
+  print()
+
+mod <- data %>%
+  filter(period != "con", variable == "w.rel.4mmol") %>%
+  lmer(change ~ period * w.rel.4mmol + pre + (1 | id), data = .) %>%
+  summ(confint = TRUE, digits = 3) %>% 
+  print()
+
+mod <- data %>%
+  filter(period != "con", variable == "vo2.rel.max") %>%
+  lmer(change ~ period * w.rel.4mmol + pre + (1 | id), data = .) %>%
+  summ(confint = TRUE, digits = 3) %>% 
+  print()
+
+mod <- data %>%
+  filter(period != "con", variable == "p.vo2.4mmol") %>%
+  lmer(change ~ period * w.rel.4mmol + pre + (1 | id), data = .) %>%
+  summ(confint = TRUE, digits = 3) %>% 
+  print()
+
+mod <- data %>%
+  filter(period != "con", variable == "ge.3.fresh") %>%
+  lmer(change ~ period * w.rel.4mmol + pre + (1 | id), data = .) %>%
+  summ(confint = TRUE, digits = 3) %>% 
+  print()
+
+```
+
+#### VO2max at baseline
+```{r}
+
+mod <- data %>%
+  filter(period != "con", variable == "index") %>%
+  lmer(change ~ period * vo2.rel.max + pre + (1 | id), data = .) %>%
+  summ(confint = TRUE, digits = 3) %>% 
+  print()
+
+mod <- data %>%
+  filter(period != "con", variable == "w.rel.15tt") %>%
+  lmer(change ~ period * vo2.rel.max + pre + (1 | id), data = .) %>%
+  summ(confint = TRUE, digits = 3) %>% 
+  print()
+
+mod <- data %>%
+  filter(period != "con", variable == "w.rel.max") %>%
+  lmer(change ~ period * vo2.rel.max + pre + (1 | id), data = .) %>%
+  summ(confint = TRUE, digits = 3) %>% 
+  print()
+
+mod <- data %>%
+  filter(period != "con", variable == "w.rel.4mmol") %>%
+  lmer(change ~ period * vo2.rel.max + pre + (1 | id), data = .) %>%
+  summ(confint = TRUE, digits = 3) %>% 
+  print()
+
+mod <- data %>%
+  filter(period != "con", variable == "vo2.rel.max") %>%
+  lmer(change ~ period * vo2.rel.max + pre + (1 | id), data = .) %>%
+  summ(confint = TRUE, digits = 3) %>% 
+  print()
+
+mod <- data %>%
+  filter(period != "con", variable == "p.vo2.4mmol") %>%
+  lmer(change ~ period * vo2.rel.max + pre + (1 | id), data = .) %>%
+  summ(confint = TRUE, digits = 3) %>% 
+  print()
+
+mod <- data %>%
+  filter(period != "con", variable == "ge.3.fresh") %>%
+  lmer(change ~ period * vo2.rel.max + pre + (1 | id), data = .) %>%
+  summ(confint = TRUE, digits = 3) %>% 
+  print()
+
+```
+
+#### % of VO2max at 4mmol baseline
+```{r}
+
+mod <- data %>%
+  filter(period != "con", variable == "index") %>%
+  lmer(change ~ period * p.vo2.4mmol + pre + (1 | id), data = .) %>%
+  summ(confint = TRUE, digits = 3) %>% 
+  print()
+
+mod <- data %>%
+  filter(period != "con", variable == "w.rel.15tt") %>%
+  lmer(change ~ period * p.vo2.4mmol + pre + (1 | id), data = .) %>%
+  summ(confint = TRUE, digits = 3) %>% 
+  print()
+
+mod <- data %>%
+  filter(period != "con", variable == "w.rel.max") %>%
+  lmer(change ~ period * p.vo2.4mmol + pre + (1 | id), data = .) %>%
+  summ(confint = TRUE, digits = 3) %>% 
+  print()
+
+mod <- data %>%
+  filter(period != "con", variable == "w.rel.4mmol") %>%
+  lmer(change ~ period * p.vo2.4mmol + pre + (1 | id), data = .) %>%
+  summ(confint = TRUE, digits = 3) %>% 
+  print()
+
+mod <- data %>%
+  filter(period != "con", variable == "vo2.rel.max") %>%
+  lmer(change ~ period * p.vo2.4mmol + pre + (1 | id), data = .) %>%
+  summ(confint = TRUE, digits = 3) %>% 
+  print()
+
+mod <- data %>%
+  filter(period != "con", variable == "p.vo2.4mmol") %>%
+  lmer(change ~ period * p.vo2.4mmol + pre + (1 | id), data = .) %>%
+  summ(confint = TRUE, digits = 3) %>% 
+  print()
+
+mod <- data %>%
+  filter(period != "con", variable == "ge.3.fresh") %>%
+  lmer(change ~ period * p.vo2.4mmol + pre + (1 | id), data = .) %>%
+  summ(confint = TRUE, digits = 3) %>% 
+  print()
+
+```
+
+#### GE at baseline
+```{r}
+
+mod <- data %>%
+  filter(period != "con", variable == "index") %>%
+  lmer(change ~ period * ge.3.fresh + pre + (1 | id), data = .) %>%
+  summ(confint = TRUE, digits = 3) %>% 
+  print()
+
+mod <- data %>%
+  filter(period != "con", variable == "w.rel.15tt") %>%
+  lmer(change ~ period * ge.3.fresh + pre + (1 | id), data = .) %>%
+  summ(confint = TRUE, digits = 3) %>% 
+  print()
+
+mod <- data %>%
+  filter(period != "con", variable == "w.rel.max") %>%
+  lmer(change ~ period * ge.3.fresh + pre + (1 | id), data = .) %>%
+  summ(confint = TRUE, digits = 3) %>% 
+  print()
+
+mod <- data %>%
+  filter(period != "con", variable == "w.rel.4mmol") %>%
+  lmer(change ~ period * ge.3.fresh + pre + (1 | id), data = .) %>%
+  summ(confint = TRUE, digits = 3) %>% 
+  print()
+
+mod <- data %>%
+  filter(period != "con", variable == "vo2.rel.max") %>%
+  lmer(change ~ period * ge.3.fresh + pre + (1 | id), data = .) %>%
+  summ(confint = TRUE, digits = 3) %>% 
+  print()
+
+mod <- data %>%
+  filter(period != "con", variable == "p.vo2.4mmol") %>%
+  lmer(change ~ period * ge.3.fresh + pre + (1 | id), data = .) %>%
+  summ(confint = TRUE, digits = 3) %>% 
+  print()
+
+mod <- data %>%
+  filter(period != "con", variable == "ge.3.fresh") %>%
+  lmer(change ~ period * ge.3.fresh + pre + (1 | id), data = .) %>%
+  summ(confint = TRUE, digits = 3) %>% 
+  print()
+
+```
+
+#### Isometric peak torque at 480 degrees/sec at baseline
+```{r}
+
+mod <- data %>%
+  filter(period != "con", variable == "index") %>%
+  lmer(change ~ period * peak.torque.480 + pre + (1 | id), data = .) %>%
+  summ(confint = TRUE, digits = 3) %>% 
+  print()
+
+mod <- data %>%
+  filter(period != "con", variable == "w.rel.15tt") %>%
+  lmer(change ~ period * peak.torque.480 + pre + (1 | id), data = .) %>%
+  summ(confint = TRUE, digits = 3) %>% 
+  print()
+
+mod <- data %>%
+  filter(period != "con", variable == "w.rel.max") %>%
+  lmer(change ~ period * peak.torque.480 + pre + (1 | id), data = .) %>%
+  summ(confint = TRUE, digits = 3) %>% 
+  print()
+
+mod <- data %>%
+  filter(period != "con", variable == "w.rel.4mmol") %>%
+  lmer(change ~ period * peak.torque.480 + pre + (1 | id), data = .) %>%
+  summ(confint = TRUE, digits = 3) %>% 
+  print()
+
+mod <- data %>%
+  filter(period != "con", variable == "vo2.rel.max") %>%
+  lmer(change ~ period * peak.torque.480 + pre + (1 | id), data = .) %>%
+  summ(confint = TRUE, digits = 3) %>% 
+  print()
+
+mod <- data %>%
+  filter(period != "con", variable == "p.vo2.4mmol") %>%
+  lmer(change ~ period * peak.torque.480 + pre + (1 | id), data = .) %>%
+  summ(confint = TRUE, digits = 3) %>% 
+  print()
+
+mod <- data %>%
+  filter(period != "con", variable == "ge.3.fresh") %>%
+  lmer(change ~ period * peak.torque.480 + pre + (1 | id), data = .) %>%
+  summ(confint = TRUE, digits = 3) %>% 
+  print()
+
+
+figure <- data %>% 
+  filter(period != "con", variable == "w.rel.15tt") %>%
+  ggplot(aes(x=peak.torque.480, y=change, color=period)) +
+  geom_point() +
+  geom_smooth(method="lm", se=TRUE, level = 0.95) + 
+  theme_pubr() +
+  labs(x = "Isometric peak torque 480 d/s", y = expression("∆ PO"["15min"]*"  ( W ∙ kg"^-1*") ")) +
+  theme(text=element_text(family="serif", face="plain", size=11))
+figure
+
+```
+
+## Muscle characteristics
+#### Muscle thickness (m. vastus lateralis, average of upper and lower part)
+```{r}
+
+mod <- data %>%
+  filter(period != "con", variable == "index") %>%
+  lmer(change ~ period * lat.avg + pre + (1 | id), data = .) %>%
+  summ(confint = TRUE, digits = 3) %>% 
+  print()
+
+mod <- data %>%
+  filter(period != "con", variable == "w.rel.15tt") %>%
+  lmer(change ~ period * lat.avg + pre + (1 | id), data = .) %>%
+  summ(confint = TRUE, digits = 3) %>% 
+  print()
+
+mod <- data %>%
+  filter(period != "con", variable == "w.rel.max") %>%
+  lmer(change ~ period * lat.avg + pre + (1 | id), data = .) %>%
+  summ(confint = TRUE, digits = 3) %>% 
+  print()
+
+mod <- data %>%
+  filter(period != "con", variable == "w.rel.4mmol") %>%
+  lmer(change ~ period * lat.avg + pre + (1 | id), data = .) %>%
+  summ(confint = TRUE, digits = 3) %>% 
+  print()
+
+mod <- data %>%
+  filter(period != "con", variable == "vo2.rel.max") %>%
+  lmer(change ~ period * lat.avg + pre + (1 | id), data = .) %>%
+  summ(confint = TRUE, digits = 3) %>% 
+  print()
+
+mod <- data %>%
+  filter(period != "con", variable == "p.vo2.4mmol") %>%
+  lmer(change ~ period * lat.avg + pre + (1 | id), data = .) %>%
+  summ(confint = TRUE, digits = 3) %>% 
+  print()
+
+mod <- data %>%
+  filter(period != "con", variable == "ge.3.fresh") %>%
+  lmer(change ~ period * lat.avg + pre + (1 | id), data = .) %>%
+  summ(confint = TRUE, digits = 3) %>% 
+  print()
+
+
+figure <- data %>% 
+  filter(period != "con", variable == "w.rel.15tt") %>%
+  ggplot(aes(x=lat.avg, y=change, color=period)) +
+  geom_point() +
+  geom_smooth(method="lm", se=TRUE, level = 0.95) + 
+  theme_pubr() +
+  labs(x = "Muscle thickness m. vastus lateralis", y = expression("∆ PO"["15min"]*"  ( W ∙ kg"^-1*") ")) +
+  theme(text=element_text(family="serif", face="plain", size=11))
+figure
+
+```
+
+#### Lean mass legs (kg) at baseline
+```{r}
+
+mod <- data %>%
+  filter(period != "con", variable == "index") %>%
+  lmer(change ~ period * lean.mass.legs + pre + (1 | id), data = .) %>%
+  summ(confint = TRUE, digits = 3) %>% 
+  print()
+
+mod <- data %>%
+  filter(period != "con", variable == "w.rel.15tt") %>%
+  lmer(change ~ period * lean.mass.legs + pre + (1 | id), data = .) %>%
+  summ(confint = TRUE, digits = 3) %>% 
+  print()
+
+mod <- data %>%
+  filter(period != "con", variable == "w.rel.max") %>%
+  lmer(change ~ period * lean.mass.legs + pre + (1 | id), data = .) %>%
+  summ(confint = TRUE, digits = 3) %>% 
+  print()
+
+mod <- data %>%
+  filter(period != "con", variable == "w.rel.4mmol") %>%
+  lmer(change ~ period * lean.mass.legs + pre + (1 | id), data = .) %>%
+  summ(confint = TRUE, digits = 3) %>% 
+  print()
+
+mod <- data %>%
+  filter(period != "con", variable == "vo2.rel.max") %>%
+  lmer(change ~ period * lean.mass.legs + pre + (1 | id), data = .) %>%
+  summ(confint = TRUE, digits = 3) %>% 
+  print()
+
+mod <- data %>%
+  filter(period != "con", variable == "p.vo2.4mmol") %>%
+  lmer(change ~ period * lean.mass.legs + pre + (1 | id), data = .) %>%
+  summ(confint = TRUE, digits = 3) %>% 
+  print()
+
+mod <- data %>%
+  filter(period != "con", variable == "ge.3.fresh") %>%
+  lmer(change ~ period * lean.mass.legs + pre + (1 | id), data = .) %>%
+  summ(confint = TRUE, digits = 3) %>% 
+  print()
+
+```
+
+#### Fat free mass legs (kg) at baseline
+```{r}
+
+mod <- data %>%
+  filter(period != "con", variable == "index") %>%
+  lmer(change ~ period * fat.free.mass.legs + pre + (1 | id), data = .) %>%
+  summ(confint = TRUE, digits = 3) %>% 
+  print()
+
+mod <- data %>%
+  filter(period != "con", variable == "w.rel.15tt") %>%
+  lmer(change ~ period * fat.free.mass.legs + pre + (1 | id), data = .) %>%
+  summ(confint = TRUE, digits = 3) %>% 
+  print()
+
+mod <- data %>%
+  filter(period != "con", variable == "w.rel.max") %>%
+  lmer(change ~ period * fat.free.mass.legs + pre + (1 | id), data = .) %>%
+  summ(confint = TRUE, digits = 3) %>% 
+  print()
+
+mod <- data %>%
+  filter(period != "con", variable == "w.rel.4mmol") %>%
+  lmer(change ~ period * fat.free.mass.legs + pre + (1 | id), data = .) %>%
+  summ(confint = TRUE, digits = 3) %>% 
+  print()
+
+mod <- data %>%
+  filter(period != "con", variable == "vo2.rel.max") %>%
+  lmer(change ~ period * fat.free.mass.legs + pre + (1 | id), data = .) %>%
+  summ(confint = TRUE, digits = 3) %>% 
+  print()
+
+mod <- data %>%
+  filter(period != "con", variable == "p.vo2.4mmol") %>%
+  lmer(change ~ period * fat.free.mass.legs + pre + (1 | id), data = .) %>%
+  summ(confint = TRUE, digits = 3) %>% 
+  print()
+
+mod <- data %>%
+  filter(period != "con", variable == "ge.3.fresh") %>%
+  lmer(change ~ period * fat.free.mass.legs + pre + (1 | id), data = .) %>%
+  summ(confint = TRUE, digits = 3) %>% 
+  print()
+
+```
+
+## Blood variables
+
+#### Hemoglobin mass
+```{r}
+
+mod <- data %>%
+  filter(period != "con", variable == "index") %>%
+  lmer(change ~ period * hbmass.kg + pre + (1 | id), data = .) %>%
+  summ(confint = TRUE, digits = 3) %>% 
+  print()
+
+mod <- data %>%
+  filter(period != "con", variable == "w.rel.15tt") %>%
+  lmer(change ~ period * hbmass.kg + pre + (1 | id), data = .) %>%
+  summ(confint = TRUE, digits = 3) %>% 
+  print()
+
+mod <- data %>%
+  filter(period != "con", variable == "w.rel.max") %>%
+  lmer(change ~ period * hbmass.kg + pre + (1 | id), data = .) %>%
+  summ(confint = TRUE, digits = 3) %>% 
+  print()
+
+mod <- data %>%
+  filter(period != "con", variable == "w.rel.4mmol") %>%
+  lmer(change ~ period * hbmass.kg + pre + (1 | id), data = .) %>%
+  summ(confint = TRUE, digits = 3) %>% 
+  print()
+
+mod <- data %>%
+  filter(period != "con", variable == "vo2.rel.max") %>%
+  lmer(change ~ period * hbmass.kg + pre + (1 | id), data = .) %>%
+  summ(confint = TRUE, digits = 3) %>% 
+  print()
+
+mod <- data %>%
+  filter(period != "con", variable == "p.vo2.4mmol") %>%
+  lmer(change ~ period * hbmass.kg + pre + (1 | id), data = .) %>%
+  summ(confint = TRUE, digits = 3) %>% 
+  print()
+
+mod <- data %>%
+  filter(period != "con", variable == "ge.3.fresh") %>%
+  lmer(change ~ period * hbmass.kg + pre + (1 | id), data = .) %>%
+  summ(confint = TRUE, digits = 3) %>% 
+  print()
+
+
+
+figure <- data %>% 
+  filter(period != "con", variable == "w.rel.4mmol") %>%
+  ggplot(aes(x=hbmass.kg, y=change, color=period)) +
+  geom_point() +
+  geom_smooth(method="lm", se=TRUE, level = 0.95) + 
+  theme_pubr() +
+  labs(x = expression("% of VO"["2max"]*"  during interval sessions (%) "), y = expression("∆ PO"["4mmol"]*"  ( W ∙ kg"^-1*") ")) +
+  theme(text=element_text(family="serif", face="plain", size=11))
+figure
+
+```
+
+#### Blood volume
+```{r}
+
+mod <- data %>%
+  filter(period != "con", variable == "index") %>%
+  lmer(change ~ period * bv.kg + pre + (1 | id), data = .) %>%
+  summ(confint = TRUE, digits = 3) %>% 
+  print()
+
+mod <- data %>%
+  filter(period != "con", variable == "w.rel.15tt") %>%
+  lmer(change ~ period * bv.kg + pre + (1 | id), data = .) %>%
+  summ(confint = TRUE, digits = 3) %>% 
+  print()
+
+mod <- data %>%
+  filter(period != "con", variable == "w.rel.max") %>%
+  lmer(change ~ period * bv.kg + pre + (1 | id), data = .) %>%
+  summ(confint = TRUE, digits = 3) %>% 
+  print()
+
+mod <- data %>%
+  filter(period != "con", variable == "w.rel.4mmol") %>%
+  lmer(change ~ period * bv.kg + pre + (1 | id), data = .) %>%
+  summ(confint = TRUE, digits = 3) %>% 
+  print()
+
+mod <- data %>%
+  filter(period != "con", variable == "vo2.rel.max") %>%
+  lmer(change ~ period * bv.kg + pre + (1 | id), data = .) %>%
+  summ(confint = TRUE, digits = 3) %>% 
+  print()
+
+mod <- data %>%
+  filter(period != "con", variable == "p.vo2.4mmol") %>%
+  lmer(change ~ period * bv.kg + pre + (1 | id), data = .) %>%
+  summ(confint = TRUE, digits = 3) %>% 
+  print()
+
+mod <- data %>%
+  filter(period != "con", variable == "ge.3.fresh") %>%
+  lmer(change ~ period * bv.kg + pre + (1 | id), data = .) %>%
+  summ(confint = TRUE, digits = 3) %>% 
+  print()
+
+```
+
+#### Plasma volume
+```{r}
+
+mod <- data %>%
+  filter(period != "con", variable == "index") %>%
+  lmer(change ~ period * pv.kg + pre + (1 | id), data = .) %>%
+  summ(confint = TRUE, digits = 3) %>% 
+  print()
+
+mod <- data %>%
+  filter(period != "con", variable == "w.rel.15tt") %>%
+  lmer(change ~ period * pv.kg + pre + (1 | id), data = .) %>%
+  summ(confint = TRUE, digits = 3) %>% 
+  print()
+
+mod <- data %>%
+  filter(period != "con", variable == "w.rel.max") %>%
+  lmer(change ~ period * pv.kg + pre + (1 | id), data = .) %>%
+  summ(confint = TRUE, digits = 3) %>% 
+  print()
+
+mod <- data %>%
+  filter(period != "con", variable == "w.rel.4mmol") %>%
+  lmer(change ~ period * pv.kg + pre + (1 | id), data = .) %>%
+  summ(confint = TRUE, digits = 3) %>% 
+  print()
+
+mod <- data %>%
+  filter(period != "con", variable == "vo2.rel.max") %>%
+  lmer(change ~ period * pv.kg + pre + (1 | id), data = .) %>%
+  summ(confint = TRUE, digits = 3) %>% 
+  print()
+
+mod <- data %>%
+  filter(period != "con", variable == "p.vo2.4mmol") %>%
+  lmer(change ~ period * pv.kg + pre + (1 | id), data = .) %>%
+  summ(confint = TRUE, digits = 3) %>% 
+  print()
+
+mod <- data %>%
+  filter(period != "con", variable == "ge.3.fresh") %>%
+  lmer(change ~ period * pv.kg + pre + (1 | id), data = .) %>%
+  summ(confint = TRUE, digits = 3) %>% 
+  print()
+
+```

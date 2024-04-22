@@ -398,50 +398,43 @@ responses_data <- pre_post_data %>%
   mutate(p.change = ((post - pre)/pre)*100) %>% 
   print()
 
-# PO 15min at pre-test in all blocks. Will be used as an independent variable later.
+# Preparing variables that will be used as independent variables later.
 w.rel.15tt_data <- pre_post_data %>%  
   select(id, period, timepoint, w.rel.15tt) %>% 
   filter(timepoint == "pre") %>%
   select(id, period, w.rel.15tt) %>% 
   print()
 
-# %VO2max@4mmol at pre-test in all blocks. Will be used as an independent variable later.
-p.vo2.4mmol_data <- pre_post_data %>%  
-  select(id, period, timepoint, p.vo2.4mmol) %>% 
-  filter(timepoint == "pre") %>%
-  select(id, period, p.vo2.4mmol) %>% 
-  print()
-
-# ge.3.fresh at pre-test in all blocks. Will be used as an independent variable later.
-ge.3.fresh_data <- pre_post_data %>%  
-  select(id, period, timepoint, ge.3.fresh) %>% 
-  filter(timepoint == "pre") %>%
-  select(id, period, ge.3.fresh) %>% 
-  print()
-
-# ge.2.fresh at pre-test in all blocks. Will be used as an independent variable later.
-ge.2.fresh_data <- pre_post_data %>%  
-  select(id, period, timepoint, ge.2.fresh) %>% 
-  filter(timepoint == "pre") %>%
-  select(id, period, ge.2.fresh) %>% 
-  print()
-
-# VO2max at pre-test in all blocks. Will be used as an independent variable later.
 vo2.rel.max_data <- pre_post_data %>%  
   select(id, period, timepoint, vo2.rel.max) %>% 
   filter(timepoint == "pre") %>%
   select(id, period, vo2.rel.max) %>% 
   print()
 
-# VO2max at pre-test in all blocks. Will be used as an independent variable later.
+p.vo2.4mmol_data <- pre_post_data %>%  
+  select(id, period, timepoint, p.vo2.4mmol) %>% 
+  filter(timepoint == "pre") %>%
+  select(id, period, p.vo2.4mmol) %>% 
+  print()
+
+ge.3.fresh_data <- pre_post_data %>%  
+  select(id, period, timepoint, ge.3.fresh) %>% 
+  filter(timepoint == "pre") %>%
+  select(id, period, ge.3.fresh) %>% 
+  print()
+
 peak.torque.60_data <- pre_post_data %>%  
   select(id, period, timepoint, peak.torque.60) %>% 
   filter(timepoint == "pre") %>%
   select(id, period, peak.torque.60) %>% 
   print()
 
+peak.torque.480_data <- pre_post_data %>%  
+  select(id, period, timepoint, peak.torque.480) %>% 
+  filter(timepoint == "pre") %>%
+  select(id, period, peak.torque.480) %>% 
+  print()
 
-# Calculating changes in body mass. Will be used as a co-variate later.
 bodymass_data  <- pre_post_data %>%  
   select(id, period, timepoint, bodymass) %>% 
   pivot_wider(names_from = timepoint,
@@ -451,8 +444,10 @@ bodymass_data  <- pre_post_data %>%
   print()
 
 
-pre_data <- pre_intervention_data %>% # husk bmi, fat.free.mass.whole, p.body.fat
-  select(id, w.rel.40tt, hbmass.kg, bv.kg, lat.avg, interm.avg) %>%
+pre_data <- pre_intervention_data %>% # Husk CS, capillary density osv
+  mutate(lean.mass.legs = `Bein Mager masse` / 1000) %>% 
+  mutate(fat.free.mass.legs = `Bein Fettfri masse` / 1000) %>% 
+  select(id, w.rel.40tt, hbmass.kg, bv.kg, pv.kg, lat.avg, interm.avg, lean.mass.legs, fat.free.mass.legs, BMI) %>%
   print()
 
 training_data <- sessions_data %>% 
@@ -464,8 +459,6 @@ training_data <- sessions_data %>%
             sec.90.hr = mean(sec.90.hr, na.rm = TRUE),
             pi.total.kj = mean(pi.total.kj, na.rm = TRUE)) %>% 
   print()
-  
-# MÅ ENDRE DXA OG ULTRALYD TIL dbl
 
 # Combine all data sets
 data <- responses_data %>% 
@@ -475,6 +468,7 @@ data <- responses_data %>%
   inner_join(ge.2.fresh_data) %>%
   inner_join(vo2.rel.max_data) %>%
   inner_join(peak.torque.60_data) %>%
+  inner_join(peak.torque.480_data) %>% 
   inner_join(bodymass_data) %>%
   inner_join(pre_data) %>% 
   full_join(training_data) %>% 
