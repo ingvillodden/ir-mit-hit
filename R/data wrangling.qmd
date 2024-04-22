@@ -405,6 +405,18 @@ w.rel.15tt_data <- pre_post_data %>%
   select(id, period, w.rel.15tt) %>% 
   print()
 
+w.rel.max_data <- pre_post_data %>%  
+  select(id, period, timepoint, w.rel.max) %>% 
+  filter(timepoint == "pre") %>%
+  select(id, period, w.rel.max) %>% 
+  print()
+
+w.rel.4mmol_data <- pre_post_data %>%  
+  select(id, period, timepoint, w.rel.4mmol) %>% 
+  filter(timepoint == "pre") %>%
+  select(id, period, w.rel.4mmol) %>% 
+  print()
+
 vo2.rel.max_data <- pre_post_data %>%  
   select(id, period, timepoint, vo2.rel.max) %>% 
   filter(timepoint == "pre") %>%
@@ -459,20 +471,22 @@ training_data <- sessions_data %>%
             sec.90.hr = mean(sec.90.hr, na.rm = TRUE),
             pi.total.kj = mean(pi.total.kj, na.rm = TRUE)) %>% 
   print()
+  
 
 # Combine all data sets
 data <- responses_data %>% 
   inner_join(w.rel.15tt_data) %>%
+  inner_join(w.rel.max_data) %>%
+  inner_join(w.rel.4mmol_data) %>%
+  inner_join(vo2.rel.max_data) %>%
   inner_join(p.vo2.4mmol_data) %>%
   inner_join(ge.3.fresh_data) %>%
-  inner_join(ge.2.fresh_data) %>%
-  inner_join(vo2.rel.max_data) %>%
   inner_join(peak.torque.60_data) %>%
   inner_join(peak.torque.480_data) %>% 
   inner_join(bodymass_data) %>%
-  inner_join(pre_data) %>% 
+  full_join(pre_data) %>% 
   full_join(training_data) %>% 
-  print()
+  view()
 
 
 ```

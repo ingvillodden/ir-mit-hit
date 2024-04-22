@@ -88,7 +88,7 @@ SDir_data <- SDir_all_data %>% filter(variable == "w.rel.15tt") %>% print()
 swc <- SDir_data %>% summarise(swc = pre_s_con*0.2) %>%  print()
   
 # SDir for the MIT and HIT block
-SDir_mit <- sqrt(SDir_data$change_s_con^2 - SDir_data$change_s_mit^2) %>% print() # Add minus in manuscript
+SDir_mit <- sqrt(SDir_data$change_s_mit^2 - SDir_data$change_s_con^2) %>% print() 
 
 SDir_hit <- sqrt(SDir_data$change_s_con^2 - SDir_data$change_s_hit^2) %>% print() # Add minus in manuscript
 
@@ -96,8 +96,8 @@ SDir_hit <- sqrt(SDir_data$change_s_con^2 - SDir_data$change_s_hit^2) %>% print(
 standard_error <- sqrt(2* ( ((SDir_data$change_s_mit^4)/ (18-1)) + 
                               ((SDir_data$change_s_con^4)/ (18-1)) ) ) %>% print()
 
-confint_upper_mit <- sqrt(-(SDir_mit^2) + (1.96 * standard_error)) %>% print() 
-confint_lower_mit <- sqrt(sqrt((-(SDir_mit^2) - (1.96 * standard_error))^2)) %>% print() #Add minus in manuscript
+confint_upper_mit <- sqrt((SDir_mit^2) + (1.96 * standard_error)) %>% print() 
+confint_lower_mit <- sqrt(sqrt(((SDir_mit^2) - (1.96 * standard_error))^2)) %>% print() #Add minus in manuscript
 
 # CI (95%) for SDir HIT
 standard_error <- sqrt(2* ( ((SDir_data$change_s_hit^4)/ (17-1)) + 
@@ -153,7 +153,7 @@ SDir_data <- SDir_all_data %>% filter(variable == "w.rel.4mmol") %>% print()
 swc <- SDir_data %>% summarise(swc = pre_s_con*0.2) %>%  print()
   
 # SDir for the MIT and HIT block
-SDir_mit <- sqrt(SDir_data$change_s_mit^2 - SDir_data$change_s_con^2) %>% print() 
+SDir_mit <- sqrt(SDir_data$change_s_con^2 - SDir_data$change_s_mit^2) %>% print() # Add minus in manuscript
 
 SDir_hit <- sqrt(SDir_data$change_s_con^2 - SDir_data$change_s_hit^2) %>% print() # Add minus in manuscript
 
@@ -161,8 +161,8 @@ SDir_hit <- sqrt(SDir_data$change_s_con^2 - SDir_data$change_s_hit^2) %>% print(
 standard_error <- sqrt(2* ( ((SDir_data$change_s_mit^4)/ (18-1)) + 
                               ((SDir_data$change_s_con^4)/ (18-1)) ) ) %>% print()
 
-confint_upper_mit <- sqrt((SDir_mit^2) + (1.96 * standard_error)) %>% print() 
-confint_lower_mit <- sqrt(sqrt(((SDir_mit^2) - (1.96 * standard_error))^2)) %>% print() #Add minus in manuscript
+confint_upper_mit <- sqrt(-(SDir_mit^2) + (1.96 * standard_error)) %>% print() 
+confint_lower_mit <- sqrt(sqrt((-(SDir_mit^2) - (1.96 * standard_error))^2)) %>% print() #Add minus in manuscript
 
 # CI (95%) for SDir HIT
 standard_error <- sqrt(2* ( ((SDir_data$change_s_hit^4)/ (18-1)) + 
@@ -249,7 +249,7 @@ swc <- SDir_data %>% summarise(swc = pre_s_con*0.2) %>%  print()
 # SDir for the MIT and HIT block
 SDir_mit <- sqrt(SDir_data$change_s_mit^2 - SDir_data$change_s_con^2) %>% print() 
 
-SDir_hit <- sqrt(SDir_data$change_s_hit^2 - SDir_data$change_s_con^2) %>% print() 
+SDir_hit <- sqrt(SDir_data$change_s_con^2 - SDir_data$change_s_hit^2) %>% print() #Add minus in manuscript
 
 # CI (95%) for SDir MIT
 standard_error <- sqrt(2* ( ((SDir_data$change_s_mit^4)/ (18-1)) + 
@@ -262,11 +262,27 @@ confint_lower_mit <- sqrt(sqrt(((SDir_mit^2) - (1.96 * standard_error))^2)) %>% 
 standard_error <- sqrt(2* ( ((SDir_data$change_s_hit^4)/ (18-1)) + 
                               ((SDir_data$change_s_con^4)/ (18-1)) ) ) %>% print()
 
-confint_upper_hit <- sqrt((SDir_hit^2) + (1.96 * standard_error)) %>% print()
-confint_lower_hit <- sqrt(sqrt(((SDir_hit^2) - (1.96 * standard_error))^2)) %>% print() # Add minus in manuscript
+confint_upper_hit <- sqrt(-(SDir_hit^2) + (1.96 * standard_error)) %>% print()
+confint_lower_hit <- sqrt(sqrt((-(SDir_hit^2) - (1.96 * standard_error))^2)) %>% print() # Add minus in manuscript
 
 
 ```
 
+```{r}
+
+group.fig <- data %>% 
+  filter(variable == "w.rel.15tt") %>% 
+  ggplot(aes(x=period, y=change)) +
+  geom_rect(aes(xmin=-Inf,xmax=Inf,ymin=-Inf,ymax=0), fill="aliceblue") +
+  geom_point(size = 1.0) +
+  geom_line(aes(group = id), linewidth = 0.5, linetype = "dashed") +
+  stat_summary(aes(colour="mean",group=1), fun = mean, geom="line", linewidth=0.8, colour = "black") +
+  scale_y_continuous(breaks = seq(-1.0, 1.0, 0.2)) +
+  labs(x = "Training period", y = expression("Change PO"["@15min"]*"  ( W"^-1*" ∙ kg"^-1*")")) +
+  theme_pubr() +
+  theme(text=element_text(family="serif", face="plain", size=11)) 
+   
+group.fig
+```
 
 

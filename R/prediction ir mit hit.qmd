@@ -122,7 +122,6 @@ mod <- data %>%
   print()
 
 
-
 figure <- data %>% 
   filter(period != "con", variable == "vo2.rel.max") %>%
   ggplot(aes(x=sec.90.vo2, y=change, color=period)) +
@@ -135,7 +134,168 @@ figure
 
 ```
 
+#### % of HRmax during sessions 
+```{r}
 
+mod <- data %>%
+  filter(period != "con", variable == "index") %>%
+  lmer(change ~ period * rel.hr + pre + (1 | id), data = .) %>%
+  summ(confint = TRUE, digits = 3) %>% 
+  print()
+
+mod <- data %>%
+  filter(period != "con", variable == "w.rel.15tt") %>%
+  lmer(change ~ period * rel.hr + pre + (1 | id), data = .) %>%
+  summ(confint = TRUE, digits = 3) %>% 
+  print()
+
+mod <- data %>%
+  filter(period != "con", variable == "w.rel.max") %>%
+  lmer(change ~ period * rel.hr + pre + (1 | id), data = .) %>%
+  summ(confint = TRUE, digits = 3) %>% 
+  print()
+
+mod <- data %>%
+  filter(period != "con", variable == "w.rel.4mmol") %>%
+  lmer(change ~ period * rel.hr + pre + (1 | id), data = .) %>%
+  summ(confint = TRUE, digits = 3) %>% 
+  print()
+
+mod <- data %>%
+  filter(period != "con", variable == "vo2.rel.max") %>%
+  lmer(change ~ period * rel.hr + pre + (1 | id), data = .) %>%
+  summ(confint = TRUE, digits = 3) %>% 
+  print()
+
+mod <- data %>%
+  filter(period != "con", variable == "p.vo2.4mmol") %>%
+  lmer(change ~ period * rel.hr + pre + (1 | id), data = .) %>%
+  summ(confint = TRUE, digits = 3) %>% 
+  print()
+
+mod <- data %>%
+  filter(period != "con", variable == "ge.3.fresh") %>%
+  lmer(change ~ period * rel.hr + pre + (1 | id), data = .) %>%
+  summ(confint = TRUE, digits = 3) %>% 
+  print()
+
+```
+
+#### Time > 90% of HRmax during sessions 
+```{r}
+
+mod <- data %>%
+  filter(period != "con", variable == "index") %>%
+  lmer(change ~ period * sec.90.hr + pre + (1 | id), data = .) %>%
+  summ(confint = TRUE, digits = 3) %>% 
+  print()
+
+mod <- data %>%
+  filter(period != "con", variable == "w.rel.15tt") %>%
+  lmer(change ~ period * sec.90.hr + pre + (1 | id), data = .) %>%
+  summ(confint = TRUE, digits = 3) %>% 
+  print()
+
+mod <- data %>%
+  filter(period != "con", variable == "w.rel.max") %>%
+  lmer(change ~ period * sec.90.hr + pre + (1 | id), data = .) %>%
+  summ(confint = TRUE, digits = 3) %>% 
+  print()
+
+mod <- data %>%
+  filter(period != "con", variable == "w.rel.4mmol") %>%
+  lmer(change ~ period * sec.90.hr + pre + (1 | id), data = .) %>%
+  summ(confint = TRUE, digits = 3) %>% 
+  print()
+
+mod <- data %>%
+  filter(period != "con", variable == "vo2.rel.max") %>%
+  lmer(change ~ period * sec.90.hr + pre + (1 | id), data = .) %>%
+  summ(confint = TRUE, digits = 3) %>% 
+  print()
+
+mod <- data %>%
+  filter(period != "con", variable == "p.vo2.4mmol") %>%
+  lmer(change ~ period * sec.90.hr + pre + (1 | id), data = .) %>%
+  summ(confint = TRUE, digits = 3) %>% 
+  print()
+
+mod <- data %>%
+  filter(period != "con", variable == "ge.3.fresh") %>%
+  lmer(change ~ period * sec.90.hr + pre + (1 | id), data = .) %>%
+  summ(confint = TRUE, digits = 3) %>% 
+  print()
+
+
+figure <- data %>% 
+  filter(period != "con", variable == "ge.3.fresh") %>%
+  ggplot(aes(x=sec.90.hr, y=change, color=period)) +
+  geom_point() +
+  geom_smooth(method="lm", se=TRUE, level = 0.95) + 
+  theme_pubr() +
+  labs(x = expression("Time > 90% of VO"["2max"]*"  during interval sessions (%) "), y = expression("∆ VO"["2max"]*"  ( mL ∙ min"^-1*" ∙ kg"^-1*") ")) +
+  theme(text=element_text(family="serif", face="plain", size=11))
+figure
+
+```
+
+#### Total power input (kJ)
+```{r}
+
+mod <- data %>%
+  filter(period != "con", variable == "index") %>%
+  lmer(change ~ period * pi.total.kj + pre + (1 | id), data = .) %>%
+  summ(confint = TRUE, digits = 3) %>% 
+  print()
+
+mod <- data %>%
+  filter(period != "con", variable == "w.rel.15tt") %>%
+  lmer(change ~ period * pi.total.kj + pre + (1 | id), data = .) %>%
+  summ(confint = TRUE, digits = 3) %>% 
+  print()
+
+mod <- data %>%
+  filter(period != "con", variable == "w.rel.max") %>%
+  lmer(change ~ period * pi.total.kj + pre + (1 | id), data = .) %>%
+  summ(confint = TRUE, digits = 3) %>% 
+  print()
+
+mod <- data %>%
+  filter(period != "con", variable == "w.rel.4mmol") %>%
+  lmer(change ~ period * pi.total.kj + pre + (1 | id), data = .) %>%
+  summ(confint = TRUE, digits = 3) %>% 
+  print()
+
+mod <- data %>%
+  filter(period != "con", variable == "vo2.rel.max") %>%
+  lmer(change ~ period * pi.total.kj + pre + (1 | id), data = .) %>%
+  summ(confint = TRUE, digits = 3) %>% 
+  print()
+
+mod <- data %>%
+  filter(period != "con", variable == "p.vo2.4mmol") %>%
+  lmer(change ~ period * pi.total.kj + pre + (1 | id), data = .) %>%
+  summ(confint = TRUE, digits = 3) %>% 
+  print()
+
+mod <- data %>%
+  filter(period != "con", variable == "ge.3.fresh") %>%
+  lmer(change ~ period * pi.total.kj + pre + (1 | id), data = .) %>%
+  summ(confint = TRUE, digits = 3) %>% 
+  print()
+
+
+figure <- data %>% 
+  filter(period != "con", variable == "vo2.rel.max") %>%
+  ggplot(aes(x=pi.total.kj, y=change, color=period)) +
+  geom_point() +
+  geom_smooth(method="lm", se=TRUE, level = 0.95) + 
+  theme_pubr() +
+  labs(x = "Total power input (kJ)", y = expression("∆ VO"["2max"]*"  ( mL ∙ min"^-1*" ∙ kg"^-1*") ")) +
+  theme(text=element_text(family="serif", face="plain", size=11))
+figure
+
+```
 
 ## Whole body characteristics
 
@@ -231,6 +391,16 @@ mod <- data %>%
   summ(confint = TRUE, digits = 3) %>% 
   print()
 
+figure <- data %>% 
+  filter(period != "con", variable == "ge.3.fresh") %>%
+  ggplot(aes(x=w.rel.15tt, y=change, color=period)) +
+  geom_point() +
+  geom_smooth(method="lm", se=TRUE, level = 0.95) + 
+  theme_pubr() +
+  labs(x = expression("PO"["15min"]*"  ( W ∙ kg"^-1*") at baseline"), y = "∆ GE (%-points)") +
+  theme(text=element_text(family="serif", face="plain", size=11))
+figure
+
 ```
 
 #### pVO2max at baseline
@@ -277,6 +447,8 @@ mod <- data %>%
   lmer(change ~ period * w.rel.max + pre + (1 | id), data = .) %>%
   summ(confint = TRUE, digits = 3) %>% 
   print()
+
+
 
 ```
 
@@ -418,6 +590,16 @@ mod <- data %>%
   lmer(change ~ period * p.vo2.4mmol + pre + (1 | id), data = .) %>%
   summ(confint = TRUE, digits = 3) %>% 
   print()
+
+figure <- data %>% 
+  filter(period != "con", variable == "w.rel.15tt") %>%
+  ggplot(aes(x=p.vo2.4mmol, y=change, color=period)) +
+  geom_point() +
+  geom_smooth(method="lm", se=TRUE, level = 0.95) + 
+  theme_pubr() +
+  labs(x = expression("% of VO"["2max"]*"4mmol  at baseline (%) "), y = expression("∆ PO"["15min"]*"  ( W ∙ kg"^-1*") ")) +
+  theme(text=element_text(family="serif", face="plain", size=11))
+figure
 
 ```
 
@@ -727,14 +909,13 @@ mod <- data %>%
   print()
 
 
-
 figure <- data %>% 
   filter(period != "con", variable == "w.rel.4mmol") %>%
   ggplot(aes(x=hbmass.kg, y=change, color=period)) +
   geom_point() +
   geom_smooth(method="lm", se=TRUE, level = 0.95) + 
   theme_pubr() +
-  labs(x = expression("% of VO"["2max"]*"  during interval sessions (%) "), y = expression("∆ PO"["4mmol"]*"  ( W ∙ kg"^-1*") ")) +
+  labs(x = expression("Hb"["mass"]*"  ( g ∙ kg"^-1*") "), y = expression("∆ PO"["4mmol"]*"  ( W ∙ kg"^-1*") ")) +
   theme(text=element_text(family="serif", face="plain", size=11))
 figure
 
