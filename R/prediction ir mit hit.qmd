@@ -650,59 +650,59 @@ mod <- data %>%
 
 ```
 
-#### Isometric peak torque at 480 degrees/sec at baseline
+#### Isometric peak torque at 60 degrees/sec at baseline
 ```{r}
 
 mod <- data %>%
   filter(period != "con", variable == "index") %>%
-  lmer(change ~ period * peak.torque.480 + pre + (1 | id), data = .) %>%
+  lmer(change ~ period * peak.torque.60 + pre + (1 | id), data = .) %>%
   summ(confint = TRUE, digits = 3) %>% 
   print()
 
 mod <- data %>%
   filter(period != "con", variable == "w.rel.15tt") %>%
-  lmer(change ~ period * peak.torque.480 + pre + (1 | id), data = .) %>%
+  lmer(change ~ period * peak.torque.60 + pre + (1 | id), data = .) %>%
   summ(confint = TRUE, digits = 3) %>% 
   print()
 
 mod <- data %>%
   filter(period != "con", variable == "w.rel.max") %>%
-  lmer(change ~ period * peak.torque.480 + pre + (1 | id), data = .) %>%
+  lmer(change ~ period * peak.torque.60 + pre + (1 | id), data = .) %>%
   summ(confint = TRUE, digits = 3) %>% 
   print()
 
 mod <- data %>%
   filter(period != "con", variable == "w.rel.4mmol") %>%
-  lmer(change ~ period * peak.torque.480 + pre + (1 | id), data = .) %>%
+  lmer(change ~ period * peak.torque.60 + pre + (1 | id), data = .) %>%
   summ(confint = TRUE, digits = 3) %>% 
   print()
 
 mod <- data %>%
   filter(period != "con", variable == "vo2.rel.max") %>%
-  lmer(change ~ period * peak.torque.480 + pre + (1 | id), data = .) %>%
+  lmer(change ~ period * peak.torque.60 + pre + (1 | id), data = .) %>%
   summ(confint = TRUE, digits = 3) %>% 
   print()
 
 mod <- data %>%
   filter(period != "con", variable == "p.vo2.4mmol") %>%
-  lmer(change ~ period * peak.torque.480 + pre + (1 | id), data = .) %>%
+  lmer(change ~ period * peak.torque.60 + pre + (1 | id), data = .) %>%
   summ(confint = TRUE, digits = 3) %>% 
   print()
 
 mod <- data %>%
   filter(period != "con", variable == "ge.3.fresh") %>%
-  lmer(change ~ period * peak.torque.480 + pre + (1 | id), data = .) %>%
+  lmer(change ~ period * peak.torque.60 + pre + (1 | id), data = .) %>%
   summ(confint = TRUE, digits = 3) %>% 
   print()
 
 
 figure <- data %>% 
   filter(period != "con", variable == "w.rel.15tt") %>%
-  ggplot(aes(x=peak.torque.480, y=change, color=period)) +
+  ggplot(aes(x=peak.torque.60, y=change, color=period)) +
   geom_point() +
   geom_smooth(method="lm", se=TRUE, level = 0.95) + 
   theme_pubr() +
-  labs(x = "Isometric peak torque 480 d/s", y = expression("∆ PO"["15min"]*"  ( W ∙ kg"^-1*") ")) +
+  labs(x = "Isometric peak torque 60 d/s", y = expression("∆ PO"["15min"]*"  ( W ∙ kg"^-1*") ")) +
   theme(text=element_text(family="serif", face="plain", size=11))
 figure
 
