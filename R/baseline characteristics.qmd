@@ -14,25 +14,38 @@ editor_options:
 # in the intervention is found (based on the code list), and then mean baseline 
 # characteristics of the participants are calculated
 
+# Baseline characteristics
+
 # Participants who´s first test was the pre test in CON
-# 
 baseline_con <- pre_post_data %>%
-  filter(period == "con", timepoint == "pre", !id %in% c("18", "20", "40")) %>%
+  filter(period == "con", timepoint == "pre", 
+         !id %in% c("18", "20", "40")) %>% # These id-s´first test was in MIT
   print()
 
 # Participants who´s first test was the pre test in MIT
 baseline_mit <- pre_post_data %>% 
-  filter(period == "con", timepoint == "pre", 
-         !id %in% c("3", "8", "15", "16", "21", "36", "42")) %>%
+  filter(period == "mit", timepoint == "pre", 
+         !id %in% c("3", "8", "15", "16", "21", "36", "42")) %>% # These id-s´first test was in CON
   print()
 
 
 # Calculating baseline characteristics
 baseline <- baseline_con %>%
-  inner_join(baseline_mit) %>%
+  full_join(baseline_mit) %>% 
   summarise(across(c(age, bodymass, bodyheight, vo2.rel.max), 
                    list(m = mean, s = sd), na.rm = TRUE)) %>%
   print()
+
+
+  
+# Performance level
+  
+pl.level <- baseline_con %>%
+  full_join(baseline_mit) %>%
+  select(id, gender, vo2.rel.max) %>%
+  filter(gender == "M") %>% 
+  view()
+
 
 ```
 

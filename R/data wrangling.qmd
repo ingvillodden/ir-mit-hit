@@ -22,6 +22,7 @@ library(psych)
 library(cowplot)
 library(plotly)
 library(jtools)
+library(gridGraphics)
 
 ```
 
@@ -441,10 +442,10 @@ peak.torque.60_data <- pre_post_data %>%
   select(id, period, peak.torque.60) %>% 
   print()
 
-peak.torque.480_data <- pre_post_data %>%  
-  select(id, period, timepoint, peak.torque.480) %>% 
+peak.torque.240_data <- pre_post_data %>%  
+  select(id, period, timepoint, peak.torque.240) %>% 
   filter(timepoint == "pre") %>%
-  select(id, period, peak.torque.480) %>% 
+  select(id, period, peak.torque.240) %>% 
   print()
 
 bodymass_data  <- pre_post_data %>%  
@@ -471,6 +472,14 @@ training_data <- sessions_data %>%
             sec.90.hr = mean(sec.90.hr, na.rm = TRUE),
             pi.total.kj = mean(pi.total.kj, na.rm = TRUE)) %>% 
   print()
+
+feeling.legs_data <- 
+  read_excel("data/training_diary_ir_data.xlsx", na = "na") %>%
+  select(id, period, feeling.legs) %>% 
+  filter(!period %in% c("pre.con", "pre.mit", "pre.hit")) %>% 
+  group_by(id, period) %>% 
+  summarise(feeling.legs = mean(feeling.legs, na.rm = TRUE)) %>% 
+  print()
   
 
 # Combine all data sets
@@ -482,10 +491,11 @@ data <- responses_data %>%
   inner_join(p.vo2.4mmol_data) %>%
   inner_join(ge.3.fresh_data) %>%
   inner_join(peak.torque.60_data) %>%
-  inner_join(peak.torque.480_data) %>% 
+  inner_join(peak.torque.240_data) %>% 
   inner_join(bodymass_data) %>%
   full_join(pre_data) %>% 
-  full_join(training_data) %>% 
+  full_join(training_data) %>%
+  full_join(feeling.legs_data) %>%
   view()
 
 

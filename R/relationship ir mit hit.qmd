@@ -65,14 +65,23 @@ summ(mod, confint = TRUE, digits = 3)
 
 icc <- ICC(relation_data, alpha=.05, missing = TRUE) %>%  print()
 
-fig <- ggplot(relation_data, aes(x=hit, y=mit)) +
+mit_hit_fig <- ggplot(relation_data, aes(x=mit, y=hit)) +
   geom_point() +
   geom_smooth(method="lm", colour = "black") +
   theme_pubr() +
-  labs(x = expression("HIT   ∆ PO"["@15min"]*"  ( W ∙ kg"^-1*") "), 
-       y = expression("MIT   ∆ PO"["@15min"]*"  ( W ∙ kg"^-1*") ")) +
+  labs(x = expression("MIT   ∆ PO"["15-min"]*"  ( W ∙ kg"^-1*") "), 
+       y = expression("HIT   ∆ PO"["15-min"]*"  ( W ∙ kg"^-1*") ")) +
   theme(text=element_text(family="serif", face="plain", size=11))
-fig
+mit_hit_fig
+
+saveRDS(SDir.fig, "./figures/rds/mit_hit_fig.RDS")
+
+
+ggsave("figures/mit_hit_fig.pdf", plot = mit_hit_fig, width = 25, height = 20,
+       dpi = 600,
+       units = "cm",
+       device = cairo_pdf)
+
 
 
 ## pVO2max
@@ -205,4 +214,54 @@ fig <- ggplot(relation_data, aes(x=hit, y=mit)) +
 fig
 
 ```
+
+
+```{r}
+
+# Figure 4
+
+axis.width <- 0.2
+axis.ticks.width <- 0.2
+lable.size <- 5
+line.width <- 0.3
+point.size <- 0.4
+
+
+
+figure4 <- ggplot(relation_data, aes(x=mit, y=hit)) +
+  geom_point(size = point.size, colour = "grey") +
+  geom_smooth(method="lm", se=TRUE, level = 0.95, lwd = line.width, colour = "black") +
+  theme_pubr() +
+  scale_y_continuous(limits = c(-0.02, 0.06), 
+                     breaks = seq(from = -0.02, to = 0.06, by = 0.02), 
+                     expand = c(0.005, 0.005)) +
+  scale_x_continuous(limits = c(-0.02, 0.12), 
+                     breaks = seq(from = -0.02, to = 0.12, by = 0.02), 
+                     expand = c(0.005, 0.005)) +
+  labs(x = expression("MIT   ∆ PO"["15-min"]*"  ( W ∙ kg"^-1*") "), 
+       y = expression("HIT   ∆ PO"["15-min"]*"  ( W ∙ kg"^-1*") ")) +
+  theme(text=element_text(family="serif", face="plain", size=lable.size),
+        legend.position = "none",
+        axis.line.x = element_line(size = axis.width),
+        axis.line.y = element_line(size = axis.width),
+        axis.ticks = element_line(size = axis.ticks.width),
+        axis.ticks.length = unit(0.05, "cm"))
+figure4
+
+
+
+# Width of figure = 2x columns 17 cm
+# height of figure = 3/4 page = 23 * 0.75 cm
+
+saveRDS(figure4, "./figures/rds/figure4.RDS")
+
+ggsave("figures/figure4.pdf", plot = figure4, width = 8.5, height = 7, 
+       dpi = 600,
+       units = "cm", device= "pdf")
+
+
+
+
+```
+
 

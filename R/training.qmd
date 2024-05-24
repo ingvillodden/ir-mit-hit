@@ -68,24 +68,11 @@ training_table <- training %>%
 
 write_xlsx(training_table, "C:\\ir-mit-hit\\training_ir.xlsx")
 
-
-mod <- lmer(zone.1 ~ period + (1|id), data = training) %>% print()
+mod <- lmer(total.t.training ~ period + (1|id), data = training) %>% print()
 summary(mod)
 pairs(emmeans(mod, specs = ~ period))
 
-mod <- lmer(zone.2 ~ period + (1|id), data = training) %>% print()
-summary(mod)
-pairs(emmeans(mod, specs = ~ period))
-
-mod <- lmer(zone.3 ~ period + (1|id), data = training) %>% print()
-summary(mod)
-pairs(emmeans(mod, specs = ~ period))
-
-mod <- lmer(zone.4 ~ period + (1|id), data = training) %>% print()
-summary(mod)
-pairs(emmeans(mod, specs = ~ period))
-
-mod <- lmer(zone.5 ~ period + (1|id), data = training) %>% print()
+mod <- lmer(total.trimp ~ period + (1|id), data = training) %>% print()
 summary(mod)
 pairs(emmeans(mod, specs = ~ period))
 
@@ -98,22 +85,6 @@ summary(mod)
 pairs(emmeans(mod, specs = ~ period))
 
 mod <- lmer(trimp.3 ~ period + (1|id), data = training) %>% print()
-summary(mod)
-pairs(emmeans(mod, specs = ~ period))
-
-mod <- lmer(total.trimp ~ period + (1|id), data = training) %>% print()
-summary(mod)
-pairs(emmeans(mod, specs = ~ period))
-
-mod <- lmer(strength.heavy ~ period + (1|id), data = training) %>% print()
-summary(mod)
-pairs(emmeans(mod, specs = ~ period))
-
-mod <- lmer(strength.general ~ period + (1|id), data = training) %>% print()
-summary(mod)
-pairs(emmeans(mod, specs = ~ period))
-
-mod <- lmer(total.t.training ~ period + (1|id), data = training) %>% print()
 summary(mod)
 pairs(emmeans(mod, specs = ~ period))
 
