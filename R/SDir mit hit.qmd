@@ -6,7 +6,8 @@ editor_options:
   chunk_output_type: console
 ---
 
-#### Interindividual differences in training responsiveness (SDir) 
+#### Interindividual differences in training responsiveness (SDir)
+
 ```{r}
 
 # In this code chunk data is prepared to calculate SDir for the MIT and HIT block using the control group
@@ -30,6 +31,7 @@ SDir_all_data <- data %>%
 ```
 
 ##### Performance index
+
 ```{r}
 
 # Selecting outcome variable
@@ -79,6 +81,7 @@ confint_lower_hit <- sqrt(sqrt((-((SDir_hit)^2) - (1.96 * standard_error))^2)) %
 ```
 
 ##### PO15min
+
 ```{r}
 
 # Selecting outcome variable
@@ -111,6 +114,7 @@ confint_lower_hit <- sqrt(sqrt((-(SDir_hit^2) - (1.96 * standard_error))^2)) %>%
 ```
 
 ##### pVO2max
+
 ```{r}
 
 # Selecting outcome variable
@@ -142,8 +146,8 @@ confint_lower_hit <- sqrt(sqrt((-(SDir_hit^2) - (1.96 * standard_error))^2)) %>%
 
 ```
 
-
 ##### PO4mmol
+
 ```{r}
 
 # Selecting outcome variable
@@ -176,6 +180,7 @@ confint_lower_hit <- sqrt(sqrt((-(SDir_hit^2) - (1.96 * standard_error))^2)) %>%
 ```
 
 ##### VO2max
+
 ```{r}
 
 # Selecting outcome variable
@@ -206,7 +211,8 @@ confint_lower_hit <- sqrt(sqrt(((SDir_hit^2) - (1.96 * standard_error))^2)) %>% 
 
 ```
 
-##### % of VO2max at 4mmol/L [La-]
+##### % of VO2max at 4mmol/L \[La-\]
+
 ```{r}
 
 # Selecting outcome variable
@@ -238,6 +244,7 @@ confint_lower_hit <- sqrt(sqrt((-(SDir_hit^2) - (1.96 * standard_error))^2)) %>%
 ```
 
 ##### GE
+
 ```{r}
 
 # Selecting outcome variable
@@ -313,5 +320,3 @@ ggsave("figures/figure3.pdf", plot = figure3, width = 8.5, height = 9,
        dpi = 600,
        units = "cm", device= "pdf")
 ```
-
-

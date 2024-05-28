@@ -6,8 +6,8 @@ editor_options:
   chunk_output_type: console
 ---
 
-
 #### Predicting individual responses to a MIT block and a HIT block: Mechanisms/characteristics underlying individual response variability
+
 ```{r}
 
 # In this code chunk data is prepared for predictive/interaction analyses
@@ -17,7 +17,8 @@ editor_options:
 
 ## Session characteristics
 
-#### % of VO2max during sessions 
+#### % of VO2max during sessions
+
 ```{r}
 
 mod <- data %>%
@@ -91,7 +92,8 @@ figure6
 
 ```
 
-#### Time > 90% of VO2max during sessions 
+#### Time \> 90% of VO2max during sessions
+
 ```{r}
 
 mod <- data %>%
@@ -149,7 +151,8 @@ figure
 
 ```
 
-#### % of HRmax during sessions 
+#### % of HRmax during sessions
+
 ```{r}
 
 mod <- data %>%
@@ -196,7 +199,8 @@ mod <- data %>%
 
 ```
 
-#### Time > 90% of HRmax during sessions 
+#### Time \> 90% of HRmax during sessions
+
 ```{r}
 
 mod <- data %>%
@@ -255,6 +259,7 @@ figure
 ```
 
 #### Aerobic energy turnover (kJ)
+
 ```{r}
 
 mod <- data %>%
@@ -315,6 +320,7 @@ figure
 ## Whole body characteristics
 
 #### PO 40min cycling trial
+
 ```{r}
 
 mod <- data %>%
@@ -362,6 +368,7 @@ mod <- data %>%
 ```
 
 #### PO 15min cycling trial
+
 ```{r}
 
 mod <- data %>%
@@ -419,6 +426,7 @@ figure
 ```
 
 #### POVO2max at baseline
+
 ```{r}
 
 mod <- data %>%
@@ -467,7 +475,8 @@ mod <- data %>%
 
 ```
 
-#### PO 4mmol/L [blood lactate]
+#### PO 4mmol/L \[blood lactate\]
+
 ```{r}
 
 mod <- data %>%
@@ -515,6 +524,7 @@ mod <- data %>%
 ```
 
 #### VO2max at baseline
+
 ```{r}
 
 mod <- data %>%
@@ -562,6 +572,7 @@ mod <- data %>%
 ```
 
 #### % of VO2max at 4mmol baseline
+
 ```{r}
 
 mod <- data %>%
@@ -623,6 +634,7 @@ figure5B
 ```
 
 #### GE at baseline
+
 ```{r}
 
 mod <- data %>%
@@ -670,6 +682,7 @@ mod <- data %>%
 ```
 
 #### Isometric peak torque at 60 degrees/sec at baseline
+
 ```{r}
 
 mod <- data %>%
@@ -731,8 +744,8 @@ figure5C
 
 ```
 
-
 #### Isometric peak torque at 240 degrees/sec at baseline
+
 ```{r}
 
 mod <- data %>%
@@ -781,7 +794,9 @@ mod <- data %>%
 ```
 
 ## Muscle characteristics
+
 #### Muscle thickness (m. vastus lateralis, average of upper and lower part)
+
 ```{r}
 
 mod <- data %>%
@@ -844,6 +859,7 @@ figure5D
 ```
 
 #### Lean mass legs (kg) at baseline
+
 ```{r}
 
 mod <- data %>%
@@ -891,6 +907,7 @@ mod <- data %>%
 ```
 
 #### Fat free mass legs (kg) at baseline
+
 ```{r}
 
 mod <- data %>%
@@ -940,6 +957,7 @@ mod <- data %>%
 ## Blood variables
 
 #### Hemoglobin mass
+
 ```{r}
 
 mod <- data %>%
@@ -998,6 +1016,7 @@ figure
 ```
 
 #### Blood volume
+
 ```{r}
 
 mod <- data %>%
@@ -1045,6 +1064,7 @@ mod <- data %>%
 ```
 
 #### Plasma volume
+
 ```{r}
 
 mod <- data %>%
@@ -1091,10 +1111,10 @@ mod <- data %>%
 
 ```
 
-
 ## Perceived feeling
 
 #### Perceived well-beein in the legs at all performed sessions during the blocks+taper
+
 ```{r}
 
 mod <- data %>%
@@ -1322,7 +1342,6 @@ ggsave("figures/figure5.pdf", plot = figure5, width = 8.5, height = 8.5,
 
 ```
 
-
 ```{r}
 
 # Setting axis width, axis ticks width and length, label size, line width, point size and colours
@@ -1372,6 +1391,3 @@ ggsave("figures/figure6.pdf", plot = figure6, width = 8.5, height = 7,
 
 
 ```
-
-
-

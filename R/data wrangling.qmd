@@ -379,7 +379,6 @@ sessions_data <- all_sessions_data %>%
 
 ```
 
-
 #### Preparing selected data for analyses
 
 ```{r}
@@ -500,4 +499,3 @@ data <- responses_data %>%
 
 
 ```
-
