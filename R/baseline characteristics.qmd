@@ -14,7 +14,7 @@ editor_options:
 # in the intervention is found (based on the code list), and then mean baseline 
 # characteristics of the participants are calculated
 
-# Baseline characteristics
+# Baseline characteristics when enrolled in the study (n = 44)
 
 # Participants who´s first test was the pre test in CON
 baseline_con <- pre_post_data %>%
@@ -29,22 +29,127 @@ baseline_mit <- pre_post_data %>%
   print()
 
 
-# Calculating baseline characteristics
-baseline <- baseline_con %>%
+baseline_intervention <- baseline_con %>%
   full_join(baseline_mit) %>% 
-  summarise(across(c(age, bodymass, bodyheight, vo2.rel.max), 
-                   list(m = mean, s = sd), na.rm = TRUE)) %>%
-  print()
+        summarise(age.m = mean(age, na.rm = TRUE),
+                  age.s = sd(age, na.rm = TRUE),
+                  
+                  bodymass.m = mean(bodymass, na.rm = TRUE),
+                  bodymass.s = sd(bodymass, na.rm = TRUE),
+                  
+                  bodyheight.m = mean(bodyheight, na.rm = TRUE),
+                  bodyheight.s = sd(bodyheight, na.rm = TRUE),
+                  
+                  index.m = mean(index, na.rm = TRUE),
+                  index.s = sd(index, na.rm = TRUE),
+                  
+                  w.rel.15tt.m = mean(w.rel.15tt, na.rm = TRUE),
+                  w.rel.15tt.s = sd(w.rel.15tt, na.rm = TRUE),
+                  
+                  w.rel.max.m = mean(w.rel.max, na.rm = TRUE),
+                  w.rel.max.s = sd(w.rel.max, na.rm = TRUE),
+                  
+                  w.rel.4mmol.m = mean(w.rel.4mmol, na.rm = TRUE),
+                  w.rel.4mmol.s = sd(w.rel.4mmol, na.rm = TRUE),
 
-
+                  vo2.rel.max.m = mean(vo2.rel.max, na.rm = TRUE),
+                  vo2.rel.max.s = sd(vo2.rel.max, na.rm = TRUE),
+                  
+                  p.vo2.4mmol.m = mean(p.vo2.4mmol, na.rm = TRUE),
+                  p.vo2.4mmol.s = sd(p.vo2.4mmol, na.rm = TRUE),
+                  
+                  ge.3.fresh.m = mean(ge.3.fresh, na.rm = TRUE),
+                  ge.3.fresh.s = sd(ge.3.fresh, na.rm = TRUE),
+                  
+                  ge.3.tired.m = mean(ge.3.tired, na.rm = TRUE),
+                  ge.3.tired.s = sd(ge.3.tired, na.rm = TRUE)) %>% 
+        
+        # Changing the names of the variables and choosing decimals 
+        mutate("Age (years)" = paste0(round(age.m, 1), " (", round(age.s, 1),")"),
+               "Body mass (kg)" = paste0(round(bodymass.m, 1), " (", round(bodymass.s, 1),")"),
+               "Body height (cm)" = paste0(round(bodyheight.m, 1), " (", round(bodyheight.s, 1),")"),
+               "Index (W/kg)" = paste0(round(index.m, 3), " (", round(index.s, 3),")"),
+               "PO 15min (W/kg)" = paste0(round(w.rel.15tt.m, 2), " (", round(w.rel.15tt.s, 2),")"),
+               "PO VO2max (W/kg)" = paste0(round(w.rel.max.m, 2), " (", round(w.rel.max.s, 2),")"),
+               "PO 4mmol/L La- (W/kg)" = paste0(round(w.rel.4mmol.m, 2), " (", round(w.rel.4mmol.s, 2),")"),
+               "VO2max (ml/kg/min)" = paste0(round(vo2.rel.max.m, 1), " (", round(vo2.rel.max.s, 1),")"),
+               "% VO2maks 4mmol/L La- (%)" = paste0(round(p.vo2.4mmol.m, 1), " (", round(p.vo2.4mmol.s, 1),")"),
+               "GE 3. last bout fresh (%)" = paste0(round(ge.3.fresh.m, 1), " (", round(ge.3.fresh.s, 1),")")) %>% 
   
-# Performance level
   
-pl.level <- baseline_con %>%
-  full_join(baseline_mit) %>%
-  select(id, gender, vo2.rel.max) %>%
-  filter(gender == "M") %>% 
+        # Choosing which variables to put in the table
+        select("Age (years)":"GE 3. last bout fresh (%)") %>%
+  
+        # Making the table prettier
+        pivot_longer(names_to = "variable", values_to = "stat", "Age (years)":"GE 3. last bout fresh (%)") %>%
+        pivot_wider(names_from = variable, values_from = stat) %>%
   view()
+
+
+
+# Calculating baseline characteristics at onset of each training period (n = 44)
+
+baseline <- pre_post_data %>%
+  filter(timepoint == "pre") %>% 
+  group_by(period) %>% 
+        summarise(age.m = mean(age, na.rm = TRUE),
+                  age.s = sd(age, na.rm = TRUE),
+                  
+                  bodymass.m = mean(bodymass, na.rm = TRUE),
+                  bodymass.s = sd(bodymass, na.rm = TRUE),
+                  
+                  bodyheight.m = mean(bodyheight, na.rm = TRUE),
+                  bodyheight.s = sd(bodyheight, na.rm = TRUE),
+                  
+                  index.m = mean(index, na.rm = TRUE),
+                  index.s = sd(index, na.rm = TRUE),
+                  
+                  w.rel.15tt.m = mean(w.rel.15tt, na.rm = TRUE),
+                  w.rel.15tt.s = sd(w.rel.15tt, na.rm = TRUE),
+                  
+                  w.rel.max.m = mean(w.rel.max, na.rm = TRUE),
+                  w.rel.max.s = sd(w.rel.max, na.rm = TRUE),
+                  
+                  w.rel.4mmol.m = mean(w.rel.4mmol, na.rm = TRUE),
+                  w.rel.4mmol.s = sd(w.rel.4mmol, na.rm = TRUE),
+
+                  vo2.rel.max.m = mean(vo2.rel.max, na.rm = TRUE),
+                  vo2.rel.max.s = sd(vo2.rel.max, na.rm = TRUE),
+                  
+                  p.vo2.4mmol.m = mean(p.vo2.4mmol, na.rm = TRUE),
+                  p.vo2.4mmol.s = sd(p.vo2.4mmol, na.rm = TRUE),
+                  
+                  ge.3.fresh.m = mean(ge.3.fresh, na.rm = TRUE),
+                  ge.3.fresh.s = sd(ge.3.fresh, na.rm = TRUE),
+                  
+                  ge.3.tired.m = mean(ge.3.tired, na.rm = TRUE),
+                  ge.3.tired.s = sd(ge.3.tired, na.rm = TRUE)) %>% 
+        
+        # Changing the names of the variables and choosing decimals 
+        mutate("Age (years)" = paste0(round(age.m, 1), " (", round(age.s, 1),")"),
+               "Body mass (kg)" = paste0(round(bodymass.m, 1), " (", round(bodymass.s, 1),")"),
+               "Body height (cm)" = paste0(round(bodyheight.m, 1), " (", round(bodyheight.s, 1),")"),
+               "Index (W/kg)" = paste0(round(index.m, 3), " (", round(index.s, 3),")"),
+               "PO 15min (W/kg)" = paste0(round(w.rel.15tt.m, 2), " (", round(w.rel.15tt.s, 2),")"),
+               "PO VO2max (W/kg)" = paste0(round(w.rel.max.m, 2), " (", round(w.rel.max.s, 2),")"),
+               "PO 4mmol/L La- (W/kg)" = paste0(round(w.rel.4mmol.m, 2), " (", round(w.rel.4mmol.s, 2),")"),
+               "VO2max (ml/kg/min)" = paste0(round(vo2.rel.max.m, 1), " (", round(vo2.rel.max.s, 1),")"),
+               "% VO2maks 4mmol/L La- (%)" = paste0(round(p.vo2.4mmol.m, 1), " (", round(p.vo2.4mmol.s, 1),")"),
+               "GE 3. last bout fresh (%)" = paste0(round(ge.3.fresh.m, 1), " (", round(ge.3.fresh.s, 1),")")) %>% 
+  
+  
+        # Choosing which variables to put in the table
+        select(period, "Age (years)":"GE 3. last bout fresh (%)") %>%
+  
+        # Making the table prettier
+        pivot_longer(names_to = "variable", values_to = "stat", "Age (years)":"GE 3. last bout fresh (%)") %>%
+        pivot_wider(names_from = period, values_from = stat) %>%
+  view()
+
+
+write_xlsx(baseline, "C:\\ir-mit-hit\\baseline_ir.xlsx")
+
+
 
 
 ```

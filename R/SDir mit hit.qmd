@@ -280,11 +280,11 @@ confint_lower_hit <- sqrt(sqrt((-(SDir_hit^2) - (1.96 * standard_error))^2)) %>%
 
 axis.width <- 0.3
 axis.ticks.width <- 0.2
-lable.size <- 5
+lable.size <- 6
 line.width <- 0.2
-point.size <- 0.3
+point.size <- 0.8
 col_scale <- c("#228B22", "#8B0000", "#104E8B") # green, red, blue
-shape_scale <- c(15, 16, 17) # Square, Dot and triangle
+shape_scale <- c(15, 19, 17) # Square, Dot and triangle
 
 
 figure3 <- data %>% 
@@ -305,9 +305,9 @@ figure3 <- data %>%
   theme_pubr() +
   theme(text=element_text(family="serif", face="plain", size=lable.size),
         legend.position = "none",
-        axis.line.x = element_line(size = axis.width),
-        axis.line.y = element_line(size = axis.width),
-        axis.ticks = element_line(size = axis.ticks.width),
+        axis.line.x = element_line(linewidth = axis.width),
+        axis.line.y = element_line(linewidth = axis.width),
+        axis.ticks = element_line(linewidth = axis.ticks.width),
         axis.ticks.length = unit(0.05, "cm"))
 figure3 
 

@@ -94,3 +94,137 @@ pairs(emmeans(mod, specs = ~ period))
 
 
 ```
+
+
+# Interval session data
+
+```{r}
+
+
+# Differences between MIT and HIT
+mod <- lmer(pi.total.kj ~ period + (1|id), data = sessions_data) %>% print()
+summary(mod)
+pairs(emmeans(mod, specs = ~ period))
+
+
+mod <- lmer(pi ~ period + (1|id), data = sessions_data) %>% print()
+summary(mod)
+pairs(emmeans(mod, specs = ~ period))
+
+
+mod <- lmer(rel.vo2 ~ period + (1|id), data = sessions_data) %>% print()
+summary(mod)
+pairs(emmeans(mod, specs = ~ period))
+
+
+mod <- lmer(sec.90.vo2 ~ period + (1|id), data = sessions_data) %>% print()
+summary(mod)
+pairs(emmeans(mod, specs = ~ period))
+
+
+mod <- lmer(rel.hr ~ period + (1|id), data = sessions_data) %>% print()
+summary(mod)
+pairs(emmeans(mod, specs = ~ period))
+
+
+mod <- lmer(sec.90.hr ~ period + (1|id), data = sessions_data) %>% print()
+summary(mod)
+pairs(emmeans(mod, specs = ~ period))
+
+
+mod <- lmer(p.w ~ period + (1|id), data = sessions_data) %>% print()
+summary(mod)
+pairs(emmeans(mod, specs = ~ period))
+
+
+mod <- lmer(la ~ period + (1|id), data = sessions_data) %>% print()
+summary(mod)
+pairs(emmeans(mod, specs = ~ period))
+
+
+mod <- lmer(pr ~ period + (1|id), data = sessions_data) %>% print()
+summary(mod)
+pairs(emmeans(mod, specs = ~ period))
+
+
+mod <- lmer(rpe ~ period + (1|id), data = sessions_data) %>% print()
+summary(mod)
+pairs(emmeans(mod, specs = ~ period))
+
+
+mod <- lmer(s.rpe ~ period + (1|id), data = sessions_data) %>% print()
+summary(mod)
+pairs(emmeans(mod, specs = ~ period))
+
+# Making a table with all the variables I want to compare between MIT and HIT
+table <- sessions_data %>% 
+ group_by(period) %>% 
+        summarise(pi.total.kj.m = mean(pi.total.kj, na.rm = TRUE),
+                  pi.total.kj.s = sd(pi.total.kj, na.rm = TRUE),
+          
+                  pi.m = mean(pi, na.rm = TRUE),
+                  pi.s = sd(pi, na.rm = TRUE),
+                  
+                  vo2.kg.m = mean(vo2.kg, na.rm = TRUE),
+                  vo2.kg.s = sd(vo2.kg, na.rm = TRUE),
+                  
+                  rel.vo2.m = mean(rel.vo2, na.rm = TRUE),
+                  rel.vo2.s = sd(rel.vo2, na.rm = TRUE),
+                  
+                  sec.90.vo2.m = mean(sec.90.vo2, na.rm = TRUE),
+                  sec.90.vo2.s = sd(sec.90.vo2, na.rm = TRUE),
+                  
+                  hr.m = mean(hr, na.rm = TRUE),
+                  hr.s = sd(hr, na.rm = TRUE),
+                  
+                  rel.hr.m = mean(rel.hr, na.rm = TRUE),
+                  rel.hr.s = sd(rel.hr, na.rm = TRUE),
+                  
+                  sec.90.hr.m = mean(sec.90.hr, na.rm = TRUE),
+                  sec.90.hr.s = sd(sec.90.hr, na.rm = TRUE),
+                  
+                  rel.w.m = mean(rel.w, na.rm = TRUE),
+                  rel.w.s = sd(rel.w, na.rm = TRUE),
+                  
+                  p.w.m = mean(p.w, na.rm = TRUE),
+                  p.w.s = sd(p.w, na.rm = TRUE),
+                  
+                  la.m = mean(la, na.rm = TRUE),
+                  la.s = sd(la, na.rm = TRUE),
+                  
+                  pr.m = mean(pr, na.rm = TRUE),
+                  pr.s = sd(pr, na.rm = TRUE),
+                  
+                  rpe.m = mean(rpe, na.rm = TRUE),
+                  rpe.s = sd(rpe, na.rm = TRUE),
+
+                  s.rpe.m = mean(s.rpe, na.rm = TRUE),
+                  s.rpe.s = sd(s.rpe, na.rm = TRUE)) %>% 
+  
+  # Changing the names of the variables and choosing decimals 
+        mutate("Metabolic power input (kJ)" = paste0(round(pi.total.kj.m, 0), " (", round(pi.total.kj.s, 0),")"),
+               "Metabolic power input (kJ/sec)" = paste0(round(pi.m, 2), " (", round(pi.s, 2),")"),
+               "VO2 (ml/min/kg)" = paste0(round(vo2.kg.m, 1), " (",  round(vo2.kg.s, 1),")"),
+               "% of VO2max (%)" = paste0(round(rel.vo2.m, 1), " (",  round(rel.vo2.s, 1),")"),
+               "Time > 90% of VO2max (sec)" = paste0(round(sec.90.vo2.m, 0), " (",  round(sec.90.vo2.s, 0),")"),
+               "HR (bpm)" = paste0(round(hr.m, 0), " (",  round(hr.s, 0),")"),
+               "% of HRmax (%)" = paste0(round(rel.hr.m, 1), " (",  round(rel.hr.s, 1),")"),
+               "Time > 90% of HRmax (sec)" = paste0(round(sec.90.hr.m, 0), " (",  round(sec.90.hr.s, 0),")"),
+               "Power output (W/kg)" = paste0(round(rel.w.m, 2), " (", round(rel.w.s, 2),")"),
+               "% of Wmax (%)" = paste0(round(p.w.m, 1), " (", round(p.w.s, 1),")"),
+               "La- (mmol/L)" = paste0(round(la.m, 1), " (", round(la.s, 1),")"),
+               "PR (1-7)" = paste0(round(pr.m, 1), " (", round(pr.s, 1),")"),
+               "RPE (6-20)" = paste0(round(rpe.m, 1), " (", round(rpe.s, 1),")"),
+               "sRPE (0-10)" = paste0(round(s.rpe.m, 1), " (", round(s.rpe.s, 1),")")) %>% 
+  
+    
+        # Choosing which variables to put in the table
+        select(period, "Metabolic power input (kJ)", "Metabolic power input (kJ/sec)", "VO2 (ml/min/kg)", "% of VO2max (%)", "Time > 90% of VO2max (sec)", "HR (bpm)", "% of HRmax (%)", "Time > 90% of HRmax (sec)", "Power output (W/kg)", "% of Wmax (%)", "La- (mmol/L)", "PR (1-7)", "RPE (6-20)", "sRPE (0-10)") %>%
+        
+        # Making the table prettier
+        pivot_longer(names_to = "variable", values_to = "stat", "Metabolic power input (kJ)":"sRPE (0-10)") %>% 
+        pivot_wider(names_from = period, values_from = stat)  %>% view()
+
+```
+
+

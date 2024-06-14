@@ -29,7 +29,7 @@ relation_data <- data %>%
   subset(select = -id) %>%
   print()
 
-
+pearsons.r <- cor.test(relation_data$mit, relation_data$hit, method = "pearson") %>% print()
 mod <- lm(mit ~ hit, data = relation_data) 
 summ(mod, confint = TRUE, digits = 3)
 
@@ -60,6 +60,7 @@ relation_data <- data %>%
   subset(select = -id) %>%
   print()
 
+pearsons.r <- cor.test(relation_data$mit, relation_data$hit, method = "pearson") %>% print()
 mod <- lm(mit ~ hit, data = relation_data) 
 summ(mod, confint = TRUE, digits = 3)
 
@@ -95,6 +96,7 @@ relation_data <- data %>%
   subset(select = -id) %>%
   print()
 
+pearsons.r <- cor.test(relation_data$mit, relation_data$hit, method = "pearson") %>% print()
 mod <- lm(mit ~ hit, data = relation_data) 
 summ(mod, confint = TRUE, digits = 3)
 
@@ -121,6 +123,7 @@ relation_data <- data %>%
   subset(select = -id) %>%
   print()
 
+pearsons.r <- cor.test(relation_data$mit, relation_data$hit, method = "pearson") %>% print()
 mod <- lm(mit ~ hit, data = relation_data) 
 summ(mod, confint = TRUE, digits = 3)
 
@@ -147,6 +150,7 @@ relation_data <- data %>%
   subset(select = -id) %>%
   print()
 
+pearsons.r <- cor.test(relation_data$mit, relation_data$hit, method = "pearson") %>% print()
 mod <- lm(mit ~ hit, data = relation_data) 
 summ(mod, confint = TRUE, digits = 3)
 
@@ -173,6 +177,7 @@ relation_data <- data %>%
   subset(select = -id) %>%
   print()
 
+pearsons.r <- cor.test(relation_data$mit, relation_data$hit, method = "pearson") %>% print()
 mod <- lm(mit ~ hit, data = relation_data) 
 summ(mod, confint = TRUE, digits = 3)
 
@@ -199,6 +204,7 @@ relation_data <- data %>%
   subset(select = -id) %>%
   print()
 
+pearsons.r <- cor.test(relation_data$mit, relation_data$hit, method = "pearson") %>% print()
 mod <- lm(mit ~ hit, data = relation_data) 
 summ(mod, confint = TRUE, digits = 3)
 

@@ -8,16 +8,11 @@ editor_options:
 
 #### Predicting individual responses to a MIT block and a HIT block: Mechanisms/characteristics underlying individual response variability
 
-```{r}
-
-# In this code chunk data is prepared for predictive/interaction analyses
-
-
-```
 
 ## Session characteristics
 
 #### % of VO2max during sessions
+
 
 ```{r}
 
@@ -1161,12 +1156,14 @@ mod <- data %>%
 
 ```
 
+# Figure 5 with panels A, B, C, D
+
 ```{r}
 
 # Figure 5 with panels A, B, C, D
 
 # Setting axis width, axis ticks width and length, label size, line width, point size and colours
-axis.width <- 0.3
+axis.width <- 0.2
 axis.ticks.width <- 0.2
 lable.size <- 5
 line.width <- 0.2
@@ -1199,17 +1196,15 @@ legend <- data %>%
         legend.key = element_rect(fill = "white"), 
         legend.key.width = unit(2.5, "line"),
         legend.direction = "horizontal", 
-        legend.title = element_blank(),
-        legend.text = element_text(size = 3)) +
-guides(color = guide_legend(override.aes = list(size = 3)), 
-       shape = guide_legend(override.aes = list(size = 3)),
-       lty = guide_legend(override.aes = list(size = 3)))
+        legend.title = element_blank())
+        #legend.text = element_text(size = 3)) 
+#guides(color = guide_legend(override.aes = list(size = 3)), 
+       #shape = guide_legend(override.aes = list(size = 3)),
+       #lty = guide_legend(override.aes = list(size = 3)))
 legend
 
 
 legend <- get_legend(legend)
-
-
 
 
 
@@ -1251,7 +1246,7 @@ figure5B <- data %>%
   scale_x_continuous(limits = c(70, 88), 
                      breaks = seq(from = 70, to = 88, by = 2), 
                      expand = c(0.05, 0.05)) +
-  labs(x = expression("% of VO"["2max"]*"4mmol  at baseline (%) "), y = NULL) +
+  labs(x = expression("% of VO"["2max"]*" at PO"["4mmol"]*" (%) "), y = NULL) +
   theme(text=element_text(family="serif", face="plain", size=lable.size),
         legend.position = "none",
         axis.line.x = element_line(size = axis.width),
@@ -1300,7 +1295,7 @@ figure5D <- data %>%
   scale_x_continuous(limits = c(25, 55), 
                      breaks = seq(from = 25, to = 55, by = 5), 
                      expand = c(0.05, 0.05)) +
-  labs(x = "Muscle thickness m. vastus lateralis (mm)", y = NULL) +
+  labs(x = expression(paste("Muscle thickness ", italic("m. vastus lateralis"), " (mm)")), y = NULL) +
   theme(text=element_text(family="serif", face="plain", size=lable.size),
         legend.position = "none",
         axis.line.x = element_line(size = axis.width),
@@ -1319,7 +1314,16 @@ figure5.part1 <-  plot_grid(figure5A, figure5B, figure5C, figure5D,
                   vjust = 1,
                   label = c("A", "B", "C", "D"), 
                   size = 5,
-                  family="serif") 
+                  family="serif") +
+  draw_plot_label(x = c(0.1, 0.6, 0.1, 0.6), 
+                  y = c(0.95, 0.95, 0.45, 0.45), 
+                  vjust = 1,
+                  label = c("Interaction p = 0.024", "Interaction p = 0.048", 
+                            "Interaction p = 0.050", "Interaction p = 0.043"), 
+                  size = 4,
+                  family="serif",
+                  fontface="italic") 
+  
 figure5.part1
 
 
