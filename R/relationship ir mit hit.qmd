@@ -10,14 +10,10 @@ editor_options:
 
 ```{r}
 
-# In this code chunk simple linear models are made to investigate whether there
-# is a relationship between the observed individual responses/outcomes/changes
-# for the 22 participants in the MIT block and the HIT block for all 
-# investigated outcome variables. More over, ICC scores are computed to 
-# investigate the reliability of the changes in outcome variables between blocks
+# In this code chunk simple linear models are used to investigate potential correlations between the observed individual responses in MIT and HIT. Also, ICC scores are computed to investigate the reliability of the changes in outcome variables between blocks
 
 
-## Performance index
+## Endurance performance index
 
 # Formatting data to fit analyses
 relation_data <- data %>%
@@ -29,24 +25,13 @@ relation_data <- data %>%
   subset(select = -id) %>%
   print()
 
+# Correlation
 pearsons.r <- cor.test(relation_data$mit, relation_data$hit, method = "pearson") %>% print()
-mod <- lm(mit ~ hit, data = relation_data) 
-summ(mod, confint = TRUE, digits = 3)
+
 
 # ICC score
 icc <- ICC(relation_data, alpha=.05, missing = TRUE) %>%  print()
 
-# Printing linear model
-fig <- ggplot(relation_data, aes(x=hit, y=mit)) +
-  geom_point() +
-  geom_smooth(method="lm", colour = "black") +
-  theme_pubr() +
-  scale_y_continuous(breaks=seq(-0.01, 0.12, 0.02)) + 
-  scale_x_continuous(breaks=seq(-0.01, 0.06, 0.02)) + 
-  labs(x = "HIT ∆ performance index (AU)", 
-       y = "MIT ∆ performance index (AU)") +
-  theme(text=element_text(family="serif", face="plain", size=11))
-fig
 
 
 ## PO15min
@@ -61,31 +46,12 @@ relation_data <- data %>%
   print()
 
 pearsons.r <- cor.test(relation_data$mit, relation_data$hit, method = "pearson") %>% print()
-mod <- lm(mit ~ hit, data = relation_data) 
-summ(mod, confint = TRUE, digits = 3)
 
 icc <- ICC(relation_data, alpha=.05, missing = TRUE) %>%  print()
 
-mit_hit_fig <- ggplot(relation_data, aes(x=mit, y=hit)) +
-  geom_point() +
-  geom_smooth(method="lm", colour = "black") +
-  theme_pubr() +
-  labs(x = expression("MIT   ∆ PO"["15-min"]*"  ( W ∙ kg"^-1*") "), 
-       y = expression("HIT   ∆ PO"["15-min"]*"  ( W ∙ kg"^-1*") ")) +
-  theme(text=element_text(family="serif", face="plain", size=11))
-mit_hit_fig
-
-saveRDS(SDir.fig, "./figures/rds/mit_hit_fig.RDS")
 
 
-ggsave("figures/mit_hit_fig.pdf", plot = mit_hit_fig, width = 25, height = 20,
-       dpi = 600,
-       units = "cm",
-       device = cairo_pdf)
-
-
-
-## pVO2max
+## POVO2max
 
 relation_data <- data %>%
   filter(period != "con") %>% 
@@ -97,19 +63,7 @@ relation_data <- data %>%
   print()
 
 pearsons.r <- cor.test(relation_data$mit, relation_data$hit, method = "pearson") %>% print()
-mod <- lm(mit ~ hit, data = relation_data) 
-summ(mod, confint = TRUE, digits = 3)
 
-icc <- ICC(relation_data, alpha=.05, missing = TRUE) %>%  print()
-
-fig <- ggplot(relation_data, aes(x=hit, y=mit)) +
-  geom_point() +
-  geom_smooth(method="lm", colour = "black") +
-  theme_pubr() +
-  labs(x = expression("HIT   ∆ pVO"["2max"]*"  ( W ∙ kg"^-1*") "), 
-       y = expression("MIT   ∆ pVO"["2max"]*"  ( W ∙ kg"^-1*") ")) +
-  theme(text=element_text(family="serif", face="plain", size=11))
-fig
 
 
 ## PO4mmol
@@ -124,19 +78,10 @@ relation_data <- data %>%
   print()
 
 pearsons.r <- cor.test(relation_data$mit, relation_data$hit, method = "pearson") %>% print()
-mod <- lm(mit ~ hit, data = relation_data) 
-summ(mod, confint = TRUE, digits = 3)
+
 
 icc <- ICC(relation_data, alpha=.05, missing = TRUE) %>%  print()
 
-fig <- ggplot(relation_data, aes(x=hit, y=mit)) +
-  geom_point() +
-  geom_smooth(method="lm", colour = "black") +
-  theme_pubr() +
-  labs(x = expression("HIT   ∆ PO"["4mmol"]*"  ( W ∙ kg"^-1*") "), 
-       y = expression("MIT   ∆ PO"["4mmol"]*"  ( W ∙ kg"^-1*") ")) +
-  theme(text=element_text(family="serif", face="plain", size=11))
-fig
 
 
 ## VO2max
@@ -151,19 +96,9 @@ relation_data <- data %>%
   print()
 
 pearsons.r <- cor.test(relation_data$mit, relation_data$hit, method = "pearson") %>% print()
-mod <- lm(mit ~ hit, data = relation_data) 
-summ(mod, confint = TRUE, digits = 3)
 
 icc <- ICC(relation_data, alpha=.05, missing = TRUE) %>%  print()
 
-fig <- ggplot(relation_data, aes(x=hit, y=mit)) +
-  geom_point() +
-  geom_smooth(method="lm", colour = "black") +
-  theme_pubr() +
-  labs(x = expression("HIT   ∆ VO"["2max"]*"  ( mL ∙ min"^-1*" ∙ kg"^-1*") "), 
-       y = expression("MIT   ∆ VO"["2max"]*"  ( mL ∙ min"^-1*" ∙ kg"^-1*") ")) +
-  theme(text=element_text(family="serif", face="plain", size=11))
-fig
 
 
 ## % of VO2max at 4mmol [LA-]
@@ -205,19 +140,9 @@ relation_data <- data %>%
   print()
 
 pearsons.r <- cor.test(relation_data$mit, relation_data$hit, method = "pearson") %>% print()
-mod <- lm(mit ~ hit, data = relation_data) 
-summ(mod, confint = TRUE, digits = 3)
 
 icc <- ICC(relation_data, alpha=.05, missing = TRUE) %>%  print()
 
-fig <- ggplot(relation_data, aes(x=hit, y=mit)) +
-  geom_point() +
-  geom_smooth(method="lm", colour = "black") +
-  theme_pubr() +
-  labs(x = "HIT   ∆ GE (%-points)", 
-       y = "MIT   ∆ GE (%-points)") +
-  theme(text=element_text(family="serif", face="plain", size=11))
-fig
 
 ```
 

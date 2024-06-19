@@ -10,11 +10,14 @@ editor_options:
 
 ```{r}
 
-# In this code chunk each of the 44 individual participant´s first test in the 
-# in the intervention is found (based on the code list), and then mean baseline 
-# characteristics of the participants are calculated
+# In this code chunk participant characteristics at study inclusion and onset of each training period is calculated
 
-# Baseline characteristics when enrolled in the study (n = 44)
+
+
+# Baseline characteristics for all participants (n = 44) at study inclusion
+
+# In this code chunk each of the 44 individual participant´s very first test is selected, and then mean baseline characteristics of the participants are calculated. 
+# Note that the list linking participant id and participant names is saved at a safe server according to the recommendations of the Norwegian Agency for Shared Services in Education and Research
 
 # Participants who´s first test was the pre test in CON
 baseline_con <- pre_post_data %>%
@@ -87,7 +90,7 @@ baseline_intervention <- baseline_con %>%
 
 
 
-# Calculating baseline characteristics at onset of each training period (n = 44)
+# Calculating baseline characteristics at onset of CON (n=32), MIT (n=22), and HIT (n=22)
 
 baseline <- pre_post_data %>%
   filter(timepoint == "pre") %>% 
@@ -154,12 +157,12 @@ write_xlsx(baseline, "C:\\ir-mit-hit\\baseline_ir.xlsx")
 
 ```
 
+
 #### Training history
 
 ```{r}
 
-# In this code chunk the participants average training history before the 
-# intervention is calculated
+# In this code chunk the participants average training history before the intervention is calculated
 
 
 training_history <-read_excel("data/training_history_ir_data.xlsx", na = "na") %>% 
@@ -169,12 +172,12 @@ training_history <-read_excel("data/training_history_ir_data.xlsx", na = "na") %
 
 ```
 
+
 #### Temperature at all prolonged cycling tests
 
 ```{r}
 
-# In this code chunk the ambient temperature at all prolonged cycling tests
-# is calculated
+# In this code chunk the ambient temperature at all prolonged cycling tests is calculated
 
 temp.tests <-
   cycling_data %>%

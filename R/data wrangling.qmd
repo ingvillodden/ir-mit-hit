@@ -6,7 +6,7 @@ editor_options:
   chunk_output_type: console
 ---
 
-#### Installing needed packages for my project
+## Installing needed packages
 
 ```{r}
 
@@ -23,8 +23,11 @@ library(cowplot)
 library(plotly)
 library(jtools)
 library(gridGraphics)
+install.packages("ggh4x")
+library(ggh4x)
 
 ```
+
 
 ## Importing and preparing test data from MIT, HIT, and CON
 
@@ -41,7 +44,7 @@ legextention_data <-
   read_excel("data/leg_extention_ir_data.xlsx", na = "na") %>%
   print()
 
-# Cobining the above data sets and creating variables relative to body mass
+# Combining the above data sets and creating variables relative to body mass
 mutate_data <- 
   cycling_data %>% 
   inner_join(legextention_data) %>% 
@@ -67,14 +70,12 @@ index_data <-
   print()
 
 # Combining the above data sets 
-# This formatting wil be used for descriptive statistics at onset of the 
-# training intervention for the 44 individual participants
 t1_t2_t3_data <- 
   mutate_data %>% 
   inner_join(index_data) %>%
   print()
 
-# Formatting the timepoint variable to fit the later analyses
+# Formatting the timepoint variable to fit later analyses
 pre_post_data_con <- t1_t2_t3_data %>% 
   filter(period == "con") %>% 
   select(-timepoint) %>% 
@@ -93,7 +94,6 @@ pre_data_mit_con <- t1_t2_t3_data %>%
   filter(pre.post == "pre.con" | pre.post == "post.mit.pre.con" | pre.post == "pre.mit" | pre.post == "post.con.pre.mit") %>% 
   mutate(timepoint = "pre") %>% 
   mutate(period = if_else(pre.post == "post.mit.pre.con" | pre.post == "pre.con", "con", "mit")) %>% 
-  #select(id, period, timepoint, vo2.rel.max) %>% 
   print()
 
 post_data_mit_con <- t1_t2_t3_data %>% 
@@ -102,10 +102,11 @@ post_data_mit_con <- t1_t2_t3_data %>%
   filter(pre.post == "post.con" | pre.post == "post.mit.pre.con" | pre.post == "post.mit" | pre.post == "post.con.pre.mit") %>% 
   mutate(timepoint = "post") %>% 
   mutate(period = if_else(pre.post == "post.con.pre.mit" | pre.post == "post.con", "con", "mit")) %>%
-  #select(id, period, timepoint, vo2.rel.max) %>% 
   print()
 
-# Combining the formatted data sets
+
+
+# Combining the formatted data sets to one data set including all pre and post measurements 
 pre_post_data <- 
   pre_data_mit_con %>% 
   full_join(post_data_mit_con) %>% 
@@ -113,7 +114,9 @@ pre_post_data <-
   full_join(pre_post_data_con) %>%
   print()
 
-# Preparing and combining pre intervention data
+
+
+# Preparing data collected before the intervention only
 tt_data <- 
   read_excel("data/40tt_ir_data.xlsx", na = "na") %>%
   print()
@@ -131,14 +134,17 @@ hb_data <-
   read_excel("data/hb_ir_data.xlsx", na = "na") %>%
   print()
 
-# Add immuno and CS data here later
+#immuno_data <-
+  #read_excel("data/immuno_ir_data.xlsx", na = "na") %>%
+  #print()
 
+# Combining the pre data sets to one pre intervention data set
 pre_intervention_data <-
   tt_data %>% 
   inner_join(ultrasound_data) %>% 
   inner_join(dxa_data) %>%
   inner_join(hb_data) %>% 
-  view()
+  print()
 
 
 ```
@@ -147,8 +153,7 @@ pre_intervention_data <-
 
 ```{r}
 
-# # In this code chunk a file combining all the vo2 session data from individual 
-# files to one file are made
+# In this code chunk a file combining all the vo2 session data from individual files to one file are created
 
 
 # List all files in the data folder
@@ -179,12 +184,13 @@ saveRDS(vo2_data, "data/derivedData/vo2-session-ir-data.RDS")
 
 ```
 
-# Preparing VO2 data from sessions MIT and HIT
+
+## Preparing VO2 data from sessions MIT and HIT
 
 ```{r}
 
-# In this code chunk the VO2 data is loaded, new variables are created, and the
-# VO2 data is combined with the session data
+# In this code chunk the VO2 data is loaded, new variables are created, and the VO2 data is combined with the other data from interval sessions
+
 
 # Loading data
 vo2_data <- readRDS("data/derivedData/vo2-session-ir-data.RDS")
@@ -202,7 +208,6 @@ sessions_pi <- pre_data %>%
   mutate(pi = ((vo2/1000/60) * (rer * 4840 + 16890))/1000) %>%
   group_by(id, period, session) %>% 
   summarise(pi = mean(pi, na.rm = TRUE)) %>% # Now in kJ/sec
-  # Multiply with number of seconds = total kgJoul per session
   pivot_wider(values_from = pi, names_from = session) %>% 
   mutate("1" = NA,
          "2" = `2`,
@@ -218,16 +223,14 @@ select(id, period, "1", "2", "3", "4", "5", "6") %>%
 
 sessions_pi_mit <- sessions_pi %>% 
   filter(period == "mit") %>% 
-  mutate(pi.total.kj = pi*4320) %>% # PI in kJ/sec * total duration of work 
-  # intervals in sec = total PI in kJ
+  mutate(pi.total.kj = pi*4320) %>% # PI in kJ/sec * total duration of work intervals in sec = total PI in kJ
   group_by(id, period, session) %>% 
   summarise(pi.total.kj = mean(pi.total.kj, na.rm = TRUE)) %>%
   print()
 
 sessions_pi_hit <- sessions_pi %>% 
   filter(period == "hit") %>% 
-  mutate(pi.total.kj = pi*2625) %>% # PI in kJ/sec * total duration of work 
-  # intervals in sec = total PI in kJ
+  mutate(pi.total.kj = pi*2625) %>% # PI in kJ/sec * total duration of work intervals in sec = total PI in kJ
   group_by(id, period, session) %>% 
   summarise(pi.total.kj = mean(pi.total.kj, na.rm = TRUE)) %>%
   print()
@@ -367,7 +370,7 @@ all_sessions_data <- sessions_ir_data %>%
 
 
 
-# Combining the sessions data set with the vo2 session data set 
+# Combining all session data sets to one data set 
 sessions_data <- all_sessions_data %>%
   inner_join(sessions_pi) %>%
   inner_join(sessions_total_pi) %>% 
@@ -379,13 +382,14 @@ sessions_data <- all_sessions_data %>%
 
 ```
 
+
 #### Preparing selected data for analyses
 
 ```{r}
 
 # In this code chunk "pre_post_data" is formatted to fit later analyses
 
-# Changing pre and post data from wide to long format, and calculating absolute change
+# Changing pre and post data from wide to long format, and calculating absolute changes in outcome variables
 responses_data <- pre_post_data %>%  
   select(id, period, timepoint, bodymass, w.rel.max, w.rel.4mmol, w.rel.15tt, index, 
          w.rel.mean.10sec, vo2.rel.max, p.vo2.4mmol, p.vo2.15tt, ge.3.fresh, ge.3.tired) %>% 
@@ -398,7 +402,8 @@ responses_data <- pre_post_data %>%
   mutate(p.change = ((post - pre)/pre)*100) %>% 
   print()
 
-# Preparing variables that will be used as independent variables later.
+
+# Preparing variables that will be used as independent variables later
 w.rel.15tt_data <- pre_post_data %>%  
   select(id, period, timepoint, w.rel.15tt) %>% 
   filter(timepoint == "pre") %>%
@@ -456,7 +461,7 @@ bodymass_data  <- pre_post_data %>%
   print()
 
 
-pre_data <- pre_intervention_data %>% # Husk CS, capillary density osv
+pre_data <- pre_intervention_data %>% # Remember to specify fiber type, capillary density ect here
   mutate(lean.mass.legs = `Bein Mager masse` / 1000) %>% 
   mutate(fat.free.mass.legs = `Bein Fettfri masse` / 1000) %>% 
   select(id, w.rel.40tt, hbmass.kg, bv.kg, pv.kg, lat.avg, interm.avg, lean.mass.legs, fat.free.mass.legs, BMI) %>%
@@ -481,7 +486,7 @@ feeling.legs_data <-
   print()
   
 
-# Combine all data sets
+# Combine all data sets to one data set that will be used for analyses
 data <- responses_data %>% 
   inner_join(w.rel.15tt_data) %>%
   inner_join(w.rel.max_data) %>%
@@ -495,7 +500,7 @@ data <- responses_data %>%
   full_join(pre_data) %>% 
   full_join(training_data) %>%
   full_join(feeling.legs_data) %>%
-  view()
+  print()
 
 
 ```

@@ -10,12 +10,7 @@ editor_options:
 
 ```{r}
 
-# In this code chunk data is prepared to calculate SDir for the MIT and HIT block using the control group
-
-# About SDir:
-# The presence of a separate, independent control group provides an estimate of the variability because of the exercise intervention (15). Involving a control group allows estimating the magnitude of interindividual variability in the absence of exercise training and is essential to know whether the interindividual variability in the presence of exercise training is indeed due to the training (8,16,17). The variability in change scores in the control group is subtracted from the variability in change scores in the exercise group to obtain the true variability in change scores between individuals, according to the following formula:
-#〖SD〗_true=√(〖〖SD〗_intervention〗^2 )-〖〖SD〗_control〗^2
-# Where SDtrue is the true interindividual variability in response to the intervention, SDexerc is the observed interindividual variability in change scores in the exercise group, and SDcontrol is the observed interindividual variability in change scores in the control group 
+# In this code chunk data is prepared to calculate SDir for the MIT and HIT block using CON
 
 
 # Preparing data for analyses
@@ -26,11 +21,9 @@ SDir_all_data <- data %>%
   print()
 
 
-
-
 ```
 
-##### Performance index
+##### Endurance performance index
 
 ```{r}
 
@@ -44,7 +37,7 @@ swc <- SDir_data %>% summarise(swc = pre_s_con*0.2) %>%  print()
 SDir_mit <- 
   sqrt(SDir_data$change_s_mit^2 - SDir_data$change_s_con^2) %>% print()
 
-SDir_hit <- sqrt(SDir_data$change_s_con^2 - SDir_data$change_s_hit^2) %>% print() # SD con larger than SD hit. Add minus in manuscript
+SDir_hit <- sqrt(SDir_data$change_s_con^2 - SDir_data$change_s_hit^2) %>% print() # SD con larger than SD hit. Minus is added in manuscript
 
 # CI (95%) for SDir MIT
 # Calculating standard error (se) to use in CI calculations
@@ -52,31 +45,25 @@ standard_error <- sqrt(2* ( ((SDir_data$change_s_mit^4)/ (18-1)) +
                               ((SDir_data$change_s_con^4)/ (18-1)) ) ) %>% print()
 
 confint_upper_mit <- sqrt((SDir_mit^2) + (1.96 * standard_error)) %>% print() 
-confint_lower_mit <- sqrt(sqrt(((SDir_mit^2) - (1.96 * standard_error))^2)) %>% print() # Add minus in manuscript
+confint_lower_mit <- sqrt(sqrt(((SDir_mit^2) - (1.96 * standard_error))^2)) %>% print() # Minus is added in manuscript
 
 # Comment to the code:
-# Cannot take the square root of a negative value (SDir^2 - 1.96*standard error = a negative value).
-# Solve this by squaring the negative value, and then taking the square root of this value = the same value, just positive
-# Can then take the square root of SDir^2 - 1.96*standard error
-# Add minus when reporting in manuscript
-# This applies for all other calculated lower CI with that are (see comments "# Add minus in manuscript")
+# Cannot take the square root of a negative value (SDir^2 - 1.96*standard error = a negative value).This is solved by squaring the negative value, and then taking the square root of this value (= the same value, just positive). Can then take the square root of SDir^2 - 1.96*standard error. Minus is added when the value is reported in the manuscript. This also applies for negative lower CI´s (see comments "# Minus added in manuscript")
 
 
 
 # CI (95%) for SDir HIT
-standard_error <- sqrt(2* ( ((SDir_data$change_s_hit^4)/ (17-1)) + 
+standard_error <- sqrt(2* ( ((SDir_data$change_s_hit^4)/ (17-1)) + # n = 17 in HIT as one participant did not complete the 15min cycling trial, which is part of the index
                               ((SDir_data$change_s_con^4)/ (18-1)) ) ) %>% print()
-# n = 17 in HIT as one participant did not complete the 15min cycling trial, which is part of the index
+
 
 confint_upper_hit <- sqrt(-(SDir_hit^2) + (1.96 * standard_error)) %>% print()
-confint_lower_hit <- sqrt(sqrt((-((SDir_hit)^2) - (1.96 * standard_error))^2)) %>% print() 
-# Add minus in manuscript
+confint_lower_hit <- sqrt(sqrt((-((SDir_hit)^2) - (1.96 * standard_error))^2)) %>% print() # Add minus in manuscript
 
 # Comment to the code:
-# See comment above.
-# Additionally, as the SDir for HIT is negative, this is added in the equation for the calculation of
-# both the upper and lower CI
-# This applies for all calculations done with a negative SDir
+# Also see comment abov.
+# As the SDir for HIT is negative, minus is added in the equation for the calculation of both the upper and lower CI. This applies for all calculations done with a negative SDir
+
 
 ```
 
@@ -93,27 +80,27 @@ swc <- SDir_data %>% summarise(swc = pre_s_con*0.2) %>%  print()
 # SDir for the MIT and HIT block
 SDir_mit <- sqrt(SDir_data$change_s_mit^2 - SDir_data$change_s_con^2) %>% print() 
 
-SDir_hit <- sqrt(SDir_data$change_s_con^2 - SDir_data$change_s_hit^2) %>% print() # Add minus in manuscript
+SDir_hit <- sqrt(SDir_data$change_s_con^2 - SDir_data$change_s_hit^2) %>% print() # Minus is added in manuscript
 
 # CI (95%) for SDir MIT
 standard_error <- sqrt(2* ( ((SDir_data$change_s_mit^4)/ (18-1)) + 
                               ((SDir_data$change_s_con^4)/ (18-1)) ) ) %>% print()
 
 confint_upper_mit <- sqrt((SDir_mit^2) + (1.96 * standard_error)) %>% print() 
-confint_lower_mit <- sqrt(sqrt(((SDir_mit^2) - (1.96 * standard_error))^2)) %>% print() #Add minus in manuscript
+confint_lower_mit <- sqrt(sqrt(((SDir_mit^2) - (1.96 * standard_error))^2)) %>% print() # Minus is added in manuscript
 
 # CI (95%) for SDir HIT
 standard_error <- sqrt(2* ( ((SDir_data$change_s_hit^4)/ (17-1)) + 
                               ((SDir_data$change_s_con^4)/ (18-1)) ) ) %>% print()
-# n = 17 in HIT as one participant did not complete the 15min cycling trial, which is part of the index
+# n = 17 in HIT as one participant did not complete the 15min cycling trial
 
 confint_upper_hit <- sqrt(-(SDir_hit^2) + (1.96 * standard_error)) %>% print()
-confint_lower_hit <- sqrt(sqrt((-(SDir_hit^2) - (1.96 * standard_error))^2)) %>% print() # Add minus in manuscript
+confint_lower_hit <- sqrt(sqrt((-(SDir_hit^2) - (1.96 * standard_error))^2)) %>% print() # Minus is added in manuscript
 
 
 ```
 
-##### pVO2max
+##### POVO2max
 
 ```{r}
 
@@ -126,22 +113,21 @@ swc <- SDir_data %>% summarise(swc = pre_s_con*0.2) %>%  print()
 # SDir for the MIT and HIT block
 SDir_mit <- sqrt(SDir_data$change_s_mit^2 - SDir_data$change_s_con^2) %>% print() 
 
-SDir_hit <- sqrt(SDir_data$change_s_con^2 - SDir_data$change_s_hit^2) %>% print() # Add minus in manuscript
+SDir_hit <- sqrt(SDir_data$change_s_con^2 - SDir_data$change_s_hit^2) %>% print() # Minus is added in manuscript
 
 # CI (95%) for SDir MIT
 standard_error <- sqrt(2* ( ((SDir_data$change_s_mit^4)/ (18-1)) + 
                               ((SDir_data$change_s_con^4)/ (18-1)) ) ) %>% print()
 
 confint_upper_mit <- sqrt((SDir_mit^2) + (1.96 * standard_error)) %>% print() 
-confint_lower_mit <- sqrt(sqrt(((SDir_mit^2) - (1.96 * standard_error))^2)) %>% print() #Add minus in manuscript
+confint_lower_mit <- sqrt(sqrt(((SDir_mit^2) - (1.96 * standard_error))^2)) %>% print() # Minus is added in manuscript
 
 # CI (95%) for SDir HIT
 standard_error <- sqrt(2* ( ((SDir_data$change_s_hit^4)/ (18-1)) + 
                               ((SDir_data$change_s_con^4)/ (18-1)) ) ) %>% print()
-# n = 17 in HIT as one participant did not complete the 15min cycling trial, which is part of the index
 
 confint_upper_hit <- sqrt(-(SDir_hit^2) + (1.96 * standard_error)) %>% print()
-confint_lower_hit <- sqrt(sqrt((-(SDir_hit^2) - (1.96 * standard_error))^2)) %>% print() # Add minus in manuscript
+confint_lower_hit <- sqrt(sqrt((-(SDir_hit^2) - (1.96 * standard_error))^2)) %>% print() # Minus is added in manuscript
 
 
 ```
@@ -157,24 +143,23 @@ SDir_data <- SDir_all_data %>% filter(variable == "w.rel.4mmol") %>% print()
 swc <- SDir_data %>% summarise(swc = pre_s_con*0.2) %>%  print()
   
 # SDir for the MIT and HIT block
-SDir_mit <- sqrt(SDir_data$change_s_con^2 - SDir_data$change_s_mit^2) %>% print() # Add minus in manuscript
+SDir_mit <- sqrt(SDir_data$change_s_con^2 - SDir_data$change_s_mit^2) %>% print() # Minus is added in manuscript
 
-SDir_hit <- sqrt(SDir_data$change_s_con^2 - SDir_data$change_s_hit^2) %>% print() # Add minus in manuscript
+SDir_hit <- sqrt(SDir_data$change_s_con^2 - SDir_data$change_s_hit^2) %>% print() # Minus is added in manuscript
 
 # CI (95%) for SDir MIT
 standard_error <- sqrt(2* ( ((SDir_data$change_s_mit^4)/ (18-1)) + 
                               ((SDir_data$change_s_con^4)/ (18-1)) ) ) %>% print()
 
 confint_upper_mit <- sqrt(-(SDir_mit^2) + (1.96 * standard_error)) %>% print() 
-confint_lower_mit <- sqrt(sqrt((-(SDir_mit^2) - (1.96 * standard_error))^2)) %>% print() #Add minus in manuscript
+confint_lower_mit <- sqrt(sqrt((-(SDir_mit^2) - (1.96 * standard_error))^2)) %>% print() # Minus is added in manuscript
 
 # CI (95%) for SDir HIT
 standard_error <- sqrt(2* ( ((SDir_data$change_s_hit^4)/ (18-1)) + 
                               ((SDir_data$change_s_con^4)/ (18-1)) ) ) %>% print()
-# n = 17 in HIT as one participant did not complete the 15min cycling trial, which is part of the index
 
 confint_upper_hit <- sqrt(-(SDir_hit^2) + (1.96 * standard_error)) %>% print()
-confint_lower_hit <- sqrt(sqrt((-(SDir_hit^2) - (1.96 * standard_error))^2)) %>% print() # Add minus in manuscript
+confint_lower_hit <- sqrt(sqrt((-(SDir_hit^2) - (1.96 * standard_error))^2)) %>% print() # Minus is added in manuscript
 
 
 ```
@@ -199,19 +184,19 @@ standard_error <- sqrt(2* ( ((SDir_data$change_s_mit^4)/ (18-1)) +
                               ((SDir_data$change_s_con^4)/ (18-1)) ) ) %>% print()
 
 confint_upper_mit <- sqrt((SDir_mit^2) + (1.96 * standard_error)) %>% print() 
-confint_lower_mit <- sqrt(sqrt(((SDir_mit^2) - (1.96 * standard_error))^2)) %>% print() #Add minus in manuscript
+confint_lower_mit <- sqrt(sqrt(((SDir_mit^2) - (1.96 * standard_error))^2)) %>% print() # Minus is added in manuscript
 
 # CI (95%) for SDir HIT
 standard_error <- sqrt(2* ( ((SDir_data$change_s_hit^4)/ (18-1)) + 
                               ((SDir_data$change_s_con^4)/ (18-1)) ) ) %>% print()
 
 confint_upper_hit <- sqrt((SDir_hit^2) + (1.96 * standard_error)) %>% print()
-confint_lower_hit <- sqrt(sqrt(((SDir_hit^2) - (1.96 * standard_error))^2)) %>% print() # Add minus in manuscript
+confint_lower_hit <- sqrt(sqrt(((SDir_hit^2) - (1.96 * standard_error))^2)) %>% print() # Minus is added in manuscript
 
 
 ```
 
-##### % of VO2max at 4mmol/L \[La-\]
+##### % of VO2max at 4mmol/L [La-]
 
 ```{r}
 
@@ -224,21 +209,21 @@ swc <- SDir_data %>% summarise(swc = pre_s_con*0.2) %>%  print()
 # SDir for the MIT and HIT block
 SDir_mit <- sqrt(SDir_data$change_s_mit^2 - SDir_data$change_s_con^2) %>% print() 
 
-SDir_hit <- sqrt(SDir_data$change_s_con^2 - SDir_data$change_s_hit^2) %>% print() #Add minus in manuscript
+SDir_hit <- sqrt(SDir_data$change_s_con^2 - SDir_data$change_s_hit^2) %>% print() # Minus is added in manuscript
 
 # CI (95%) for SDir MIT
 standard_error <- sqrt(2* ( ((SDir_data$change_s_mit^4)/ (18-1)) + 
                               ((SDir_data$change_s_con^4)/ (18-1)) ) ) %>% print()
 
 confint_upper_mit <- sqrt((SDir_mit^2) + (1.96 * standard_error)) %>% print() 
-confint_lower_mit <- sqrt(sqrt(((SDir_mit^2) - (1.96 * standard_error))^2)) %>% print() #Add minus in manuscript
+confint_lower_mit <- sqrt(sqrt(((SDir_mit^2) - (1.96 * standard_error))^2)) %>% print() # Minus is added in manuscript
 
 # CI (95%) for SDir HIT
 standard_error <- sqrt(2* ( ((SDir_data$change_s_hit^4)/ (18-1)) + 
                               ((SDir_data$change_s_con^4)/ (18-1)) ) ) %>% print()
 
 confint_upper_hit <- sqrt(-(SDir_hit^2) + (1.96 * standard_error)) %>% print()
-confint_lower_hit <- sqrt(sqrt((-(SDir_hit^2) - (1.96 * standard_error))^2)) %>% print() # Add minus in manuscript
+confint_lower_hit <- sqrt(sqrt((-(SDir_hit^2) - (1.96 * standard_error))^2)) %>% print() # Minus is added in manuscript
 
 
 ```
@@ -256,28 +241,33 @@ swc <- SDir_data %>% summarise(swc = pre_s_con*0.2) %>%  print()
 # SDir for the MIT and HIT block
 SDir_mit <- sqrt(SDir_data$change_s_mit^2 - SDir_data$change_s_con^2) %>% print() 
 
-SDir_hit <- sqrt(SDir_data$change_s_con^2 - SDir_data$change_s_hit^2) %>% print() #Add minus in manuscript
+SDir_hit <- sqrt(SDir_data$change_s_con^2 - SDir_data$change_s_hit^2) %>% print() # Minus is added in manuscript
 
 # CI (95%) for SDir MIT
 standard_error <- sqrt(2* ( ((SDir_data$change_s_mit^4)/ (18-1)) + 
                               ((SDir_data$change_s_con^4)/ (18-1)) ) ) %>% print()
 
 confint_upper_mit <- sqrt((SDir_mit^2) + (1.96 * standard_error)) %>% print() 
-confint_lower_mit <- sqrt(sqrt(((SDir_mit^2) - (1.96 * standard_error))^2)) %>% print() #Add minus in manuscript
+confint_lower_mit <- sqrt(sqrt(((SDir_mit^2) - (1.96 * standard_error))^2)) %>% print() # Minus is added in manuscript
 
 # CI (95%) for SDir HIT
 standard_error <- sqrt(2* ( ((SDir_data$change_s_hit^4)/ (18-1)) + 
                               ((SDir_data$change_s_con^4)/ (18-1)) ) ) %>% print()
 
 confint_upper_hit <- sqrt(-(SDir_hit^2) + (1.96 * standard_error)) %>% print()
-confint_lower_hit <- sqrt(sqrt((-(SDir_hit^2) - (1.96 * standard_error))^2)) %>% print() # Add minus in manuscript
+confint_lower_hit <- sqrt(sqrt((-(SDir_hit^2) - (1.96 * standard_error))^2)) %>% print() # Minus is added in manuscript
 
 
 ```
 
+
+#### Figure 3
+
 ```{r}
 
+# In this code chunk Figure 3 is made
 
+# Setting widths, sizes, scales, and shapes in the figure
 axis.width <- 0.3
 axis.ticks.width <- 0.2
 lable.size <- 6
@@ -286,7 +276,7 @@ point.size <- 0.8
 col_scale <- c("#228B22", "#8B0000", "#104E8B") # green, red, blue
 shape_scale <- c(15, 19, 17) # Square, Dot and triangle
 
-
+# Creating the figure
 figure3 <- data %>% 
   filter(variable == "w.rel.15tt") %>% 
   mutate(period = factor(period, levels = c("con", "mit", "hit"), 
@@ -308,15 +298,17 @@ figure3 <- data %>%
         axis.line.x = element_line(linewidth = axis.width),
         axis.line.y = element_line(linewidth = axis.width),
         axis.ticks = element_line(linewidth = axis.ticks.width),
-        axis.ticks.length = unit(0.05, "cm"))
+        axis.ticks.length = unit(0.05, "cm")) +
+  guides(y = guide_axis_truncated(trunc_lower = c(-Inf, -0.28), trunc_upper = c(-0.30, Inf))) 
 figure3 
 
-# Width of figure = 2x columns 17 cm
-# height of figure = 3/4 page = 23 * 0.75 cm
+# Figure size
+# Width =  1 column = 8.5 cm
+# height of figure = 9 cm
 
 saveRDS(figure3, "./figures/rds/figure3.RDS")
 
-ggsave("figures/figure3.pdf", plot = figure3, width = 8.5, height = 9, 
-       dpi = 600,
-       units = "cm", device= "pdf")
+ggsave("figures/figure3.tiff", plot = figure3, width = 8.5, height = 9, 
+       dpi = 1200,
+       units = "cm", device= "tiff")
 ```

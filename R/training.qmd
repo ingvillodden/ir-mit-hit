@@ -6,13 +6,11 @@ editor_options:
   chunk_output_type: console
 ---
 
-# Training diary
+#### Training diary
 
 ```{r}
 
-# In this code chunk training diary data for the participants performing the
-# MIT and HIT block, as well as the participants performing the control period
-# (CON) are calculated
+# In this code chunk training diary data for MIT, HIT, and CON are calculated, and differences between training blocks investigated using linear mixed models
 
 
 # Saving the training diary data
@@ -22,8 +20,7 @@ training_diary <-read_excel("data/training_diary_ir_data.xlsx", na = "na") %>%
 # Period and group to factor
 training_diary$period <- as.factor(training_diary$period)
 
-
-# Making a table with mean (SD) for the given training varibles for the whole intervention
+# Calculating TRIMP scores and preparing training diary data for analyses
 training <-
   training_diary %>% 
   mutate(trimp.1 = (zone.1 + zone.2)* 1) %>%
@@ -33,41 +30,11 @@ training <-
   mutate(strength.heavy = strength.heavy) %>%
   mutate(strength.general = strength.general) %>%
   mutate(total.t.training = total.t.training) %>%
-  filter(!period  %in% c("pre.mit", "pre.hit", "pre.con")) %>%
+  filter(!period  %in% c("pre.mit", "pre.hit", "pre.con")) %>% # Removing traing data before each training period
   group_by(period) %>%
   print()
 
-
-
-training_table <- training %>%
-  group_by(period) %>%
-  summarise(across(c(zone.1:zone.5, trimp.1:trimp.3, total.trimp, strength.heavy, strength.general, total.t.training, feeling.legs), 
-                   list(m = mean, s = sd), na.rm = TRUE)) %>% 
-  mutate("Zone 1 (min)" = paste0(round(zone.1_m, 1), " (", round(zone.1_s, 1),")"),
-               "Zone 2 (min)" = paste0(round(zone.2_m, 1), " (", round(zone.2_s, 1),")"),
-               "Zone 3 (min)" = paste0(round(zone.3_m, 1), " (", round(zone.3_s, 1),")"),
-               "Zone 4 (min)" = paste0(round(zone.4_m, 1), " (", round(zone.4_s, 1),")"),
-               "Zone 5 (min)" = paste0(round(zone.5_m, 1), " (", round(zone.5_s, 1),")"),
-               "Trimp 1" = paste0(round(trimp.1_m, 0), " (", round(trimp.1_s, 0),")"),
-               "Trimp 2" = paste0(round(trimp.2_m, 0), " (", round(trimp.2_s, 0),")"),
-               "Trimp 3" = paste0(round(trimp.3_m, 0), " (", round(trimp.3_s, 0),")"),
-               "Total trimp" = paste0(round(total.trimp_m, 0), " (", round(total.trimp_s, 0),")"),
-               "Maximal strength (min)" = paste0(round(strength.heavy_m, 1), 
-                                                 " (", round(strength.heavy_s, 1),")"),
-               "General strength (min)" = paste0(round(strength.general_m, 1), 
-                                                 " (", round(strength.general_s, 1),")"),
-               "Total training (min)" = paste0(round(total.t.training_m, 1), 
-                                               " (", round(total.t.training_s, 1),")"),
-               "Feeling legs (1-9)" = paste0(round(feeling.legs_m, 1), 
-                                             " (", round(feeling.legs_s, 1),")") ) %>%
-  select(period, "Zone 1 (min)", "Zone 2 (min)", "Zone 3 (min)", "Zone 4 (min)", "Zone 5 (min)", "Trimp 1", "Trimp 2", "Trimp 3", "Total trimp", "Maximal strength (min)", "General strength (min)", "Total training (min)", "Feeling legs (1-9)") %>%
-  pivot_longer(names_to = "variable", values_to = "stat", "Zone 1 (min)":"Feeling legs (1-9)") %>% 
-  pivot_wider(names_from = period, values_from = stat) %>%
-  print()
-
-
-write_xlsx(training_table, "C:\\ir-mit-hit\\training_ir.xlsx")
-
+# Investigating differences in training variables between CON, MIT, and HIT using linear mixed models
 mod <- lmer(total.t.training ~ period + (1|id), data = training) %>% print()
 summary(mod)
 pairs(emmeans(mod, specs = ~ period))
@@ -93,15 +60,57 @@ summary(mod)
 pairs(emmeans(mod, specs = ~ period))
 
 
+# Making a table with mean (SD) for the given training variables in CON, MIT and HIT
+training_table <- training %>%
+  group_by(period) %>%
+  summarise(across(c(zone.1:zone.5, trimp.1:trimp.3, total.trimp, strength.heavy, strength.general, total.t.training, feeling.legs), 
+                   list(m = mean, s = sd), na.rm = TRUE)) %>% 
+  
+  # Changing the names of the variables and choosing decimals 
+  mutate("Zone 1 (min)" = paste0(round(zone.1_m, 1), " (", round(zone.1_s, 1),")"),
+               "Zone 2 (min)" = paste0(round(zone.2_m, 1), " (", round(zone.2_s, 1),")"),
+               "Zone 3 (min)" = paste0(round(zone.3_m, 1), " (", round(zone.3_s, 1),")"),
+               "Zone 4 (min)" = paste0(round(zone.4_m, 1), " (", round(zone.4_s, 1),")"),
+               "Zone 5 (min)" = paste0(round(zone.5_m, 1), " (", round(zone.5_s, 1),")"),
+               "Trimp 1" = paste0(round(trimp.1_m, 0), " (", round(trimp.1_s, 0),")"),
+               "Trimp 2" = paste0(round(trimp.2_m, 0), " (", round(trimp.2_s, 0),")"),
+               "Trimp 3" = paste0(round(trimp.3_m, 0), " (", round(trimp.3_s, 0),")"),
+               "Total trimp" = paste0(round(total.trimp_m, 0), " (", round(total.trimp_s, 0),")"),
+               "Maximal strength (min)" = paste0(round(strength.heavy_m, 1), 
+                                                 " (", round(strength.heavy_s, 1),")"),
+               "General strength (min)" = paste0(round(strength.general_m, 1), 
+                                                 " (", round(strength.general_s, 1),")"),
+               "Total training (min)" = paste0(round(total.t.training_m, 1), 
+                                               " (", round(total.t.training_s, 1),")"),
+               "Feeling legs (1-9)" = paste0(round(feeling.legs_m, 1), 
+                                             " (", round(feeling.legs_s, 1),")") ) %>%
+  
+  # Changing the names of the variables and choosing decimals 
+  select(period, "Zone 1 (min)", "Zone 2 (min)", "Zone 3 (min)", "Zone 4 (min)", "Zone 5 (min)", "Trimp 1", "Trimp 2", "Trimp 3", "Total trimp", "Maximal strength (min)", "General strength (min)", "Total training (min)", "Feeling legs (1-9)") %>%
+  
+  
+  # Formatting the table
+  pivot_longer(names_to = "variable", values_to = "stat", "Zone 1 (min)":"Feeling legs (1-9)") %>% 
+  pivot_wider(names_from = period, values_from = stat) %>%
+  print()
+
+
+write_xlsx(training_table, "C:\\ir-mit-hit\\training_ir.xlsx")
+
+
 ```
 
 
-# Interval session data
+#### Interval session data
 
 ```{r}
 
+# In this code chunk differences between MIT and HIT in interval session data is investigated using linear mixed models
 
-# Differences between MIT and HIT
+
+# Investigating differences in interval session data between MIT and HIT using linear mixed models
+# Note that there are only aerobic energy turnover and VO2 data from 14 of the 22 participants completing MIT and HIT
+
 mod <- lmer(pi.total.kj ~ period + (1|id), data = sessions_data) %>% print()
 summary(mod)
 pairs(emmeans(mod, specs = ~ period))
@@ -156,7 +165,8 @@ mod <- lmer(s.rpe ~ period + (1|id), data = sessions_data) %>% print()
 summary(mod)
 pairs(emmeans(mod, specs = ~ period))
 
-# Making a table with all the variables I want to compare between MIT and HIT
+
+# Making a table with mean (SD) for the given interval session variables in MIT and HIT
 table <- sessions_data %>% 
  group_by(period) %>% 
         summarise(pi.total.kj.m = mean(pi.total.kj, na.rm = TRUE),
@@ -221,9 +231,10 @@ table <- sessions_data %>%
         # Choosing which variables to put in the table
         select(period, "Metabolic power input (kJ)", "Metabolic power input (kJ/sec)", "VO2 (ml/min/kg)", "% of VO2max (%)", "Time > 90% of VO2max (sec)", "HR (bpm)", "% of HRmax (%)", "Time > 90% of HRmax (sec)", "Power output (W/kg)", "% of Wmax (%)", "La- (mmol/L)", "PR (1-7)", "RPE (6-20)", "sRPE (0-10)") %>%
         
-        # Making the table prettier
+        # Formatting the table
         pivot_longer(names_to = "variable", values_to = "stat", "Metabolic power input (kJ)":"sRPE (0-10)") %>% 
-        pivot_wider(names_from = period, values_from = stat)  %>% view()
+        pivot_wider(names_from = period, values_from = stat)  %>% 
+        print()
 
 ```
 
