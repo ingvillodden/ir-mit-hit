@@ -1219,48 +1219,17 @@ mod <- data %>%
 # Figure 5 with panels A, B, C, D
 
 # Setting axis width, axis ticks width and length, label size, line width, point size and colours
-axis.width <- 0.2
-axis.ticks.width <- 0.2
-lable.size <- 5
-line.width <- 0.2
-point.size <- 0.3
-col_scale <- c("#104E8B", "#8B0000") # Blue and red
+axis.width <- 0.4
+axis.ticks.width <- 0.4
+lable.size <- 8
+line.width <- 0.5
+point.size <- 0.6
+col_scale <- c("#8B0000", "#104E8B") # Blue and red
 shape_scale <- c(16, 17) # Dot and triangle
 line.type_scale <- c("solid", "solid")
 
 #col_scale <- c("#228B22", "#8B0000", "#104E8B") # green, red, blue
 
-
-# Creating the legend
-
-
-legend <- data %>% 
-  filter(period != "con", variable == "w.rel.15tt") %>% 
-  mutate(period = factor(period, levels = c("mit", "hit"), 
-                        labels = c("Short MIT block", "Short HIT block"))) %>%
-  ggplot(aes(pre, post, 
-             lty = period,
-             group = period, 
-             color = period, 
-             shape = period)) +
-  geom_line() + 
-  geom_point() +
-  scale_linetype_manual(values = line.type_scale) +
-  scale_shape_manual(values = c(17, 16)) +
-  scale_color_manual(values = c("#8B0000", "#104E8B")) +
-  theme(legend.background = element_rect(fill = "white"), 
-        legend.key = element_rect(fill = "white"), 
-        legend.key.width = unit(2.5, "line"),
-        legend.direction = "horizontal", 
-        legend.title = element_blank())
-        #legend.text = element_text(size = 3)) 
-#guides(color = guide_legend(override.aes = list(size = 3)), 
-       #shape = guide_legend(override.aes = list(size = 3)),
-       #lty = guide_legend(override.aes = list(size = 3)))
-legend
-
-
-legend <- get_legend(legend)
 
 
 
@@ -1272,13 +1241,13 @@ figure5A <- data %>%
   geom_smooth(method="lm", se=TRUE, level = 0.95, lwd = line.width) + # se = confidence intervals
   scale_color_manual(values = col_scale) +
   theme_pubr() +
-  scale_y_continuous(limits = c(-0.25, 1), 
+  scale_y_continuous(limits = c(-0.40, 1), 
                      breaks = seq(from = -0.25, to = 1, by = 0.25), 
-                     expand = c(0.05, 0.05)) +
+                     expand = c(0, 0.05)) +
   scale_x_continuous(limits = c(68, 90), 
                      breaks = seq(from = 68, to = 90, by = 2), 
                      expand = c(0.05, 0.05)) +
-  labs(x = expression("% of VO"["2max"]*"  during interval sessions (%) "), y = expression("∆ PO"["15-min"]*"  ( W ∙ kg"^-1*") ")) +
+  labs(x = expression("% of VO"["2max"]*"  during interval sessions (%) "), y = expression("∆ PO"["15-min"]*"  (W ∙ kg"^-1*") ")) +
   theme(text=element_text(family="serif", face="plain", size=lable.size),
         legend.position = "none",
         axis.line.x = element_line(size = axis.width),
@@ -1296,9 +1265,9 @@ figure5B <- data %>%
   geom_smooth(method="lm", se=TRUE, level = 0.95, lwd = line.width) + # se = confidence intervals
   scale_color_manual(values = col_scale) +
   theme_pubr() +
-  scale_y_continuous(limits = c(-0.25, 1), 
+  scale_y_continuous(limits = c(-0.40, 1), 
                      breaks = seq(from = -0.25, to = 1, by = 0.25), 
-                     expand = c(0.05, 0.05)) +
+                     expand = c(0, 0.05)) +
   scale_x_continuous(limits = c(70, 88), 
                      breaks = seq(from = 70, to = 88, by = 2), 
                      expand = c(0.05, 0.05)) +
@@ -1320,14 +1289,14 @@ figure5C <- data %>%
   geom_smooth(method="lm", se=TRUE, level = 0.95, lwd = line.width) + # se = confidence intervals
   scale_color_manual(values = col_scale) +
   theme_pubr() +
-  scale_y_continuous(limits = c(-0.25, 1), 
+  scale_y_continuous(limits = c(-0.40, 1), 
                      breaks = seq(from = -0.25, to = 1, by = 0.25), 
+                     expand = c(0, 0.05)) +
+  scale_x_continuous(limits = c(110, 260), 
+                     breaks = seq(from = 120, to = 260, by = 20), 
                      expand = c(0.05, 0.05)) +
-  scale_x_continuous(limits = c(125, 250), 
-                     breaks = seq(from = 125, to = 250, by = 25), 
-                     expand = c(0.05, 0.05)) +
-  labs(x = expression("Isometric peak torque at 60 degrees ∙ sec"^-1*" (Nm) "),
-       y = expression("∆ PO"["15min"]*"  ( W ∙ kg"^-1*") ")) +
+  labs(x = expression("Isometric peak torque at 60 ° ∙ sec"^-1*" (Nm) "),
+       y = expression("∆ PO"["15min"]*"  (W ∙ kg"^-1*") ")) +
   theme(text=element_text(family="serif", face="plain", size=lable.size),
         legend.position = "none",
         axis.line.x = element_line(size = axis.width),
@@ -1345,11 +1314,11 @@ figure5D <- data %>%
   geom_smooth(method="lm", se=TRUE, level = 0.95, lwd = line.width) + # se = confidence intervals
   scale_color_manual(values = col_scale) +
   theme_pubr() +
-  scale_y_continuous(limits = c(-0.25, 1), 
+  scale_y_continuous(limits = c(-0.40, 1), 
                      breaks = seq(from = -0.25, to = 1, by = 0.25), 
-                     expand = c(0.05, 0.05)) +
-  scale_x_continuous(limits = c(25, 55), 
-                     breaks = seq(from = 25, to = 55, by = 5), 
+                     expand = c(0, 0.05)) +
+  scale_x_continuous(limits = c(28, 55), 
+                     breaks = seq(from = 30, to = 55, by = 5), 
                      expand = c(0.05, 0.05)) +
   labs(x = expression(paste("Muscle thickness ", italic("m. vastus lateralis"), " (mm)")), y = NULL) +
   theme(text=element_text(family="serif", face="plain", size=lable.size),
@@ -1362,30 +1331,24 @@ figure5D
 
 
 
-figure5.part1 <-  plot_grid(figure5A, figure5B, figure5C, figure5D,
+figure5 <-  plot_grid(figure5A, figure5B, figure5C, figure5D,
                   align = "hv",
                   ncol = 2, rel_heights = c(1, 1, 1, 1)) +
   draw_plot_label(x = c(0, 0.5, 0, 0.5), 
-                  y = c(0.95, 0.95, 0.45, 0.45), 
+                  y = c(0.98, 0.98, 0.48, 0.48), 
                   vjust = 1,
                   label = c("A", "B", "C", "D"), 
-                  size = 5,
+                  size = 10,
                   family="serif") +
-  draw_plot_label(x = c(0.1, 0.6, 0.1, 0.6), 
-                  y = c(0.95, 0.95, 0.45, 0.45), 
+  draw_plot_label(x = c(0.25, 0.75, 0.25, 0.75), 
+                  y = c(0.92, 0.92, 0.42, 0.42), 
                   vjust = 1,
-                  label = c("Interaction p = 0.024", "Interaction p = 0.048", 
-                            "Interaction p = 0.050", "Interaction p = 0.043"), 
-                  size = 4,
+                  label = c("MIT x HIT p = 0.024", "MIT x HIT p = 0.048", 
+                            "MIT x HIT p = 0.050", "MIT x HIT p = 0.043"), 
+                  size = 6,
                   family="serif",
                   fontface="italic") 
-  
-figure5.part1
 
-
-figure5 <- plot_grid(legend, figure5.part1,
-           align = "vv",
-           ncol = 1, rel_heights = c(0.1, 1), rel_widths = c(0.5, 1))
 
 figure5
 
@@ -1394,9 +1357,9 @@ figure5
 
 saveRDS(figure5, "./figures/rds/figure5.RDS")
 
-ggsave("figures/figure5.pdf", plot = figure5, width = 8.5, height = 8.5, 
-       dpi = 600,
-       units = "cm", device= "pdf")
+ggsave("figures/figure5.tiff", plot = figure5, width = 16, height = 15, 
+       dpi = 800,
+       units = "cm", device= "tiff")
 
 
 
@@ -1406,12 +1369,12 @@ ggsave("figures/figure5.pdf", plot = figure5, width = 8.5, height = 8.5,
 ```{r}
 
 # Setting axis width, axis ticks width and length, label size, line width, point size and colours
-axis.width <- 0.2
-axis.ticks.width <- 0.2
-lable.size <- 5
-line.width <- 0.3
-point.size <- 0.4
-col_scale <- c("#104E8B", "#8B0000")
+axis.width <- 0.4
+axis.ticks.width <- 0.4
+lable.size <- 10
+line.width <- 0.6
+point.size <- 0.8
+col_scale <- c("#8B0000", "#104E8B")
 
 
 # Figure 6
@@ -1431,7 +1394,7 @@ figure6 <- data %>%
   scale_x_continuous(limits = c(68, 90), 
                      breaks = seq(from = 68, to = 90, by = 2), 
                      expand = c(0.05, 0.05)) +
-  labs(x = expression("% of VO"["2max"]*"  during interval sessions (%) "), y = expression("∆ VO"["2max"]*"  ( mL ∙ min"^-1*" ∙ kg"^-1*") ")) +
+  labs(x = expression("% of VO"["2max"]*"  during interval sessions (%) "), y = expression("∆ VO"["2max"]*"  (mL ∙ min"^-1*" ∙ kg"^-1*") ")) +
   theme(text=element_text(family="serif", face="plain", size=lable.size),
         legend.position = "none",
         axis.line.x = element_line(size = axis.width),
@@ -1446,9 +1409,9 @@ figure6
 
 saveRDS(figure6, "./figures/rds/figure6.RDS")
 
-ggsave("figures/figure6.pdf", plot = figure6, width = 8.5, height = 7, 
-       dpi = 600,
-       units = "cm", device= "pdf")
+ggsave("figures/figure6.tiff", plot = figure6, width = 8.5, height = 7, 
+       dpi = 800,
+       units = "cm", device= "tiff")
 
 
 ```

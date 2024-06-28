@@ -268,38 +268,37 @@ confint_lower_hit <- sqrt(sqrt((-(SDir_hit^2) - (1.96 * standard_error))^2)) %>%
 # In this code chunk Figure 3 is made
 
 # Setting widths, sizes, scales, and shapes in the figure
-axis.width <- 0.3
-axis.ticks.width <- 0.2
-lable.size <- 6
-line.width <- 0.2
-point.size <- 0.8
-col_scale <- c("#228B22", "#8B0000", "#104E8B") # green, red, blue
+axis.width <- 0.4
+axis.ticks.width <- 0.4
+lable.size <- 8
+line.width <- 0.4
+point.size <- 1
+col_scale <- c("#228B22", "#104E8B", "#8B0000") # green, blue, red
 shape_scale <- c(15, 19, 17) # Square, Dot and triangle
 
 # Creating the figure
 figure3 <- data %>% 
   filter(variable == "w.rel.15tt") %>% 
   mutate(period = factor(period, levels = c("con", "mit", "hit"), 
-                        labels = c("CON", "Short MIT block", "Short HIT block"))) %>%
+                        labels = c("CON", "MIT block", "HIT block"))) %>%
   ggplot(aes(x=period, y=change)) +
   geom_rect(aes(xmin=-Inf,xmax=Inf,ymin=-Inf,ymax=0), fill="aliceblue") +
   geom_line(aes(group = id), linewidth = line.width, linetype = "dashed", colour = "grey") +
   stat_summary(aes(colour="mean",group=1), fun = mean, geom="line", linewidth=line.width, colour = "black") +
-  geom_point(aes(shape=period, color=period), size = point.size, position = position_jitter(width = 0.05), alpha = 0.75) +
+  geom_point(aes(shape=period, color=period), size = point.size, alpha = 0.75) +
   scale_shape_manual(values = c(15, 17, 16)) +
-  scale_color_manual(values = c("#228B22", "#8B0000", "#104E8B")) +
-  scale_y_continuous(limits = c(-0.25, 1), 
-                     breaks = seq(from = -0.25, to = 1, by = 0.25), 
+  scale_color_manual(values = c("#228B22", "#104E8B", "#8B0000")) +
+  scale_y_continuous(limits = c(-1, 1), 
+                     breaks = seq(from = -1, to = 1, by = 0.25), 
                      expand = c(0.05, 0.05)) +
-  labs(x = "Training period", y = expression("∆ PO"["15-min"]*"  ( W ∙ kg"^-1*") ")) +
+  labs(x = "Training period", y = expression("∆ PO"["15-min"]*"  (W ∙ kg"^-1*") ")) +
   theme_pubr() +
   theme(text=element_text(family="serif", face="plain", size=lable.size),
         legend.position = "none",
         axis.line.x = element_line(linewidth = axis.width),
         axis.line.y = element_line(linewidth = axis.width),
         axis.ticks = element_line(linewidth = axis.ticks.width),
-        axis.ticks.length = unit(0.05, "cm")) +
-  guides(y = guide_axis_truncated(trunc_lower = c(-Inf, -0.28), trunc_upper = c(-0.30, Inf))) 
+        axis.ticks.length = unit(0.05, "cm"))
 figure3 
 
 # Figure size
@@ -309,6 +308,6 @@ figure3
 saveRDS(figure3, "./figures/rds/figure3.RDS")
 
 ggsave("figures/figure3.tiff", plot = figure3, width = 8.5, height = 9, 
-       dpi = 1200,
+       dpi = 800,
        units = "cm", device= "tiff")
 ```
