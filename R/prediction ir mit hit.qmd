@@ -1005,6 +1005,450 @@ mod <- data %>%
 
 ```
 
+
+#### Type I muscle fiber cross-sectional area at baseline
+
+```{r}
+
+mod <- data %>%
+  filter(period != "con", variable == "index") %>%
+  lmer(change ~ period * type.1.area + pre + (1 | id), data = .) %>%
+  summ(confint = TRUE, digits = 3) %>% 
+  print()
+
+mod <- data %>%
+  filter(period != "con", variable == "w.rel.15tt") %>%
+  lmer(change ~ period * type.1.area + pre + (1 | id), data = .) %>%
+  summ(confint = TRUE, digits = 3) %>% 
+  print()
+
+mod <- data %>%
+  filter(period != "con", variable == "w.rel.max") %>%
+  lmer(change ~ period * type.1.area + pre + (1 | id), data = .) %>%
+  summ(confint = TRUE, digits = 3) %>% 
+  print()
+
+mod <- data %>%
+  filter(period != "con", variable == "w.rel.4mmol") %>%
+  lmer(change ~ period * type.1.area + pre + (1 | id), data = .) %>%
+  summ(confint = TRUE, digits = 3) %>% 
+  print()
+
+mod <- data %>%
+  filter(period != "con", variable == "vo2.rel.max") %>%
+  lmer(change ~ period * type.1.area + pre + (1 | id), data = .) %>%
+  summ(confint = TRUE, digits = 3) %>% 
+  print()
+
+mod <- data %>%
+  filter(period != "con", variable == "p.vo2.4mmol") %>%
+  lmer(change ~ period * type.1.area + pre + (1 | id), data = .) %>%
+  summ(confint = TRUE, digits = 3) %>% 
+  print()
+
+mod <- data %>%
+  filter(period != "con", variable == "ge.3.fresh") %>%
+  lmer(change ~ period * type.1.area + pre + (1 | id), data = .) %>%
+  summ(confint = TRUE, digits = 3) %>% 
+  print()
+
+```
+
+
+
+#### Type II muscle fiber cross-sectional area at baseline
+
+```{r}
+
+mod <- data %>%
+  filter(period != "con", variable == "index") %>%
+  lmer(change ~ period * type.2.area + pre + (1 | id), data = .) %>%
+  summ(confint = TRUE, digits = 3) %>% 
+  print()
+
+mod <- data %>%
+  filter(period != "con", variable == "w.rel.15tt") %>%
+  lmer(change ~ period * type.2.area + pre + (1 | id), data = .) %>%
+  summ(confint = TRUE, digits = 3) %>% 
+  print()
+
+mod <- data %>%
+  filter(period != "con", variable == "w.rel.max") %>%
+  lmer(change ~ period * type.2.area + pre + (1 | id), data = .) %>%
+  summ(confint = TRUE, digits = 3) %>% 
+  print()
+
+mod <- data %>%
+  filter(period != "con", variable == "w.rel.4mmol") %>%
+  lmer(change ~ period * type.2.area + pre + (1 | id), data = .) %>%
+  summ(confint = TRUE, digits = 3) %>% 
+  print()
+
+mod <- data %>%
+  filter(period != "con", variable == "vo2.rel.max") %>%
+  lmer(change ~ period * type.2.area + pre + (1 | id), data = .) %>%
+  summ(confint = TRUE, digits = 3) %>% 
+  print()
+
+mod <- data %>%
+  filter(period != "con", variable == "p.vo2.4mmol") %>%
+  lmer(change ~ period * type.2.area + pre + (1 | id), data = .) %>%
+  summ(confint = TRUE, digits = 3) %>% 
+  print()
+
+mod <- data %>%
+  filter(period != "con", variable == "ge.3.fresh") %>%
+  lmer(change ~ period * type.2.area + pre + (1 | id), data = .) %>%
+  summ(confint = TRUE, digits = 3) %>% 
+  print()
+
+```
+
+
+#### Proportion of type I muscle fibers at baseline
+
+```{r}
+
+mod <- data %>%
+  filter(period != "con", variable == "index") %>%
+  lmer(change ~ period * p.type.1 + pre + (1 | id), data = .) %>%
+  summ(confint = TRUE, digits = 3) %>% 
+  print()
+
+mod <- data %>%
+  filter(period != "con", variable == "w.rel.15tt") %>%
+  lmer(change ~ period * p.type.1 + pre + (1 | id), data = .) %>%
+  summ(confint = TRUE, digits = 3) %>% 
+  print()
+
+mod <- data %>%
+  filter(period != "con", variable == "w.rel.max") %>%
+  lmer(change ~ period * p.type.1 + pre + (1 | id), data = .) %>%
+  summ(confint = TRUE, digits = 3) %>% 
+  print()
+
+mod <- data %>%
+  filter(period != "con", variable == "w.rel.4mmol") %>%
+  lmer(change ~ period * p.type.1 + pre + (1 | id), data = .) %>%
+  summ(confint = TRUE, digits = 3) %>% 
+  print()
+
+mod <- data %>%
+  filter(period != "con", variable == "vo2.rel.max") %>%
+  lmer(change ~ period * p.type.1 + pre + (1 | id), data = .) %>%
+  summ(confint = TRUE, digits = 3) %>% 
+  print()
+
+mod <- data %>%
+  filter(period != "con", variable == "p.vo2.4mmol") %>%
+  lmer(change ~ period * p.type.1 + pre + (1 | id), data = .) %>%
+  summ(confint = TRUE, digits = 3) %>% 
+  print()
+
+mod <- data %>%
+  filter(period != "con", variable == "ge.3.fresh") %>%
+  lmer(change ~ period * p.type.1 + pre + (1 | id), data = .) %>%
+  summ(confint = TRUE, digits = 3) %>% 
+  print()
+
+```
+
+
+#### Capillary density at baseline
+
+```{r}
+
+mod <- data %>%
+  filter(period != "con", variable == "index") %>%
+  lmer(change ~ period * cd + pre + (1 | id), data = .) %>%
+  summ(confint = TRUE, digits = 3) %>% 
+  print()
+
+mod <- data %>%
+  filter(period != "con", variable == "w.rel.15tt") %>%
+  lmer(change ~ period * cd + pre + (1 | id), data = .) %>%
+  summ(confint = TRUE, digits = 3) %>% 
+  print()
+
+mod <- data %>%
+  filter(period != "con", variable == "w.rel.max") %>%
+  lmer(change ~ period * cd + pre + (1 | id), data = .) %>%
+  summ(confint = TRUE, digits = 3) %>% 
+  print()
+
+mod <- data %>%
+  filter(period != "con", variable == "w.rel.4mmol") %>%
+  lmer(change ~ period * cd + pre + (1 | id), data = .) %>%
+  summ(confint = TRUE, digits = 3) %>% 
+  print()
+
+mod <- data %>%
+  filter(period != "con", variable == "vo2.rel.max") %>%
+  lmer(change ~ period * cd + pre + (1 | id), data = .) %>%
+  summ(confint = TRUE, digits = 3) %>% 
+  print()
+
+mod <- data %>%
+  filter(period != "con", variable == "p.vo2.4mmol") %>%
+  lmer(change ~ period * cd + pre + (1 | id), data = .) %>%
+  summ(confint = TRUE, digits = 3) %>% 
+  print()
+
+mod <- data %>%
+  filter(period != "con", variable == "ge.3.fresh") %>%
+  lmer(change ~ period * cd + pre + (1 | id), data = .) %>%
+  summ(confint = TRUE, digits = 3) %>% 
+  print()
+
+```
+
+
+#### Capillary-to-fiber ratio at baseline
+
+```{r}
+
+mod <- data %>%
+  filter(period != "con", variable == "index") %>%
+  lmer(change ~ period * cf + pre + (1 | id), data = .) %>%
+  summ(confint = TRUE, digits = 3) %>% 
+  print()
+
+mod <- data %>%
+  filter(period != "con", variable == "w.rel.15tt") %>%
+  lmer(change ~ period * cf + pre + (1 | id), data = .) %>%
+  summ(confint = TRUE, digits = 3) %>% 
+  print()
+
+mod <- data %>%
+  filter(period != "con", variable == "w.rel.max") %>%
+  lmer(change ~ period * cf + pre + (1 | id), data = .) %>%
+  summ(confint = TRUE, digits = 3) %>% 
+  print()
+
+mod <- data %>%
+  filter(period != "con", variable == "w.rel.4mmol") %>%
+  lmer(change ~ period * cf + pre + (1 | id), data = .) %>%
+  summ(confint = TRUE, digits = 3) %>% 
+  print()
+
+mod <- data %>%
+  filter(period != "con", variable == "vo2.rel.max") %>%
+  lmer(change ~ period * cf + pre + (1 | id), data = .) %>%
+  summ(confint = TRUE, digits = 3) %>% 
+  print()
+
+mod <- data %>%
+  filter(period != "con", variable == "p.vo2.4mmol") %>%
+  lmer(change ~ period * cf + pre + (1 | id), data = .) %>%
+  summ(confint = TRUE, digits = 3) %>% 
+  print()
+
+mod <- data %>%
+  filter(period != "con", variable == "ge.3.fresh") %>%
+  lmer(change ~ period * cf + pre + (1 | id), data = .) %>%
+  summ(confint = TRUE, digits = 3) %>% 
+  print()
+
+```
+
+
+
+#### Capillaries around type I muscle fibers at baseline
+
+```{r}
+
+mod <- data %>%
+  filter(period != "con", variable == "index") %>%
+  lmer(change ~ period * type.1.cap.fibre + pre + (1 | id), data = .) %>%
+  summ(confint = TRUE, digits = 3) %>% 
+  print()
+
+mod <- data %>%
+  filter(period != "con", variable == "w.rel.15tt") %>%
+  lmer(change ~ period * type.1.cap.fibre + pre + (1 | id), data = .) %>%
+  summ(confint = TRUE, digits = 3) %>% 
+  print()
+
+mod <- data %>%
+  filter(period != "con", variable == "w.rel.max") %>%
+  lmer(change ~ period * type.1.cap.fibre + pre + (1 | id), data = .) %>%
+  summ(confint = TRUE, digits = 3) %>% 
+  print()
+
+mod <- data %>%
+  filter(period != "con", variable == "w.rel.4mmol") %>%
+  lmer(change ~ period * type.1.cap.fibre + pre + (1 | id), data = .) %>%
+  summ(confint = TRUE, digits = 3) %>% 
+  print()
+
+mod <- data %>%
+  filter(period != "con", variable == "vo2.rel.max") %>%
+  lmer(change ~ period * type.1.cap.fibre + pre + (1 | id), data = .) %>%
+  summ(confint = TRUE, digits = 3) %>% 
+  print()
+
+mod <- data %>%
+  filter(period != "con", variable == "p.vo2.4mmol") %>%
+  lmer(change ~ period * type.1.cap.fibre + pre + (1 | id), data = .) %>%
+  summ(confint = TRUE, digits = 3) %>% 
+  print()
+
+mod <- data %>%
+  filter(period != "con", variable == "ge.3.fresh") %>%
+  lmer(change ~ period * type.1.cap.fibre + pre + (1 | id), data = .) %>%
+  summ(confint = TRUE, digits = 3) %>% 
+  print()
+
+```
+
+
+#### Capillaries around type II muscle fibers at baseline
+
+```{r}
+
+mod <- data %>%
+  filter(period != "con", variable == "index") %>%
+  lmer(change ~ period * type.2.cap.fibre + pre + (1 | id), data = .) %>%
+  summ(confint = TRUE, digits = 3) %>% 
+  print()
+
+mod <- data %>%
+  filter(period != "con", variable == "w.rel.15tt") %>%
+  lmer(change ~ period * type.2.cap.fibre + pre + (1 | id), data = .) %>%
+  summ(confint = TRUE, digits = 3) %>% 
+  print()
+
+mod <- data %>%
+  filter(period != "con", variable == "w.rel.max") %>%
+  lmer(change ~ period * type.2.cap.fibre + pre + (1 | id), data = .) %>%
+  summ(confint = TRUE, digits = 3) %>% 
+  print()
+
+mod <- data %>%
+  filter(period != "con", variable == "w.rel.4mmol") %>%
+  lmer(change ~ period * type.2.cap.fibre + pre + (1 | id), data = .) %>%
+  summ(confint = TRUE, digits = 3) %>% 
+  print()
+
+mod <- data %>%
+  filter(period != "con", variable == "vo2.rel.max") %>%
+  lmer(change ~ period * type.2.cap.fibre + pre + (1 | id), data = .) %>%
+  summ(confint = TRUE, digits = 3) %>% 
+  print()
+
+mod <- data %>%
+  filter(period != "con", variable == "p.vo2.4mmol") %>%
+  lmer(change ~ period * type.2.cap.fibre + pre + (1 | id), data = .) %>%
+  summ(confint = TRUE, digits = 3) %>% 
+  print()
+
+mod <- data %>%
+  filter(period != "con", variable == "ge.3.fresh") %>%
+  lmer(change ~ period * type.2.cap.fibre + pre + (1 | id), data = .) %>%
+  summ(confint = TRUE, digits = 3) %>% 
+  print()
+
+```
+
+
+#### Capillaries around type I muscle fibers per area at baseline
+
+```{r}
+
+mod <- data %>%
+  filter(period != "con", variable == "index") %>%
+  lmer(change ~ period * type.1.cap.area + pre + (1 | id), data = .) %>%
+  summ(confint = TRUE, digits = 3) %>% 
+  print()
+
+mod <- data %>%
+  filter(period != "con", variable == "w.rel.15tt") %>%
+  lmer(change ~ period * type.1.cap.area + pre + (1 | id), data = .) %>%
+  summ(confint = TRUE, digits = 3) %>% 
+  print()
+
+mod <- data %>%
+  filter(period != "con", variable == "w.rel.max") %>%
+  lmer(change ~ period * type.1.cap.area + pre + (1 | id), data = .) %>%
+  summ(confint = TRUE, digits = 3) %>% 
+  print()
+
+mod <- data %>%
+  filter(period != "con", variable == "w.rel.4mmol") %>%
+  lmer(change ~ period * type.1.cap.area + pre + (1 | id), data = .) %>%
+  summ(confint = TRUE, digits = 3) %>% 
+  print()
+
+mod <- data %>%
+  filter(period != "con", variable == "vo2.rel.max") %>%
+  lmer(change ~ period * type.1.cap.area + pre + (1 | id), data = .) %>%
+  summ(confint = TRUE, digits = 3) %>% 
+  print()
+
+mod <- data %>%
+  filter(period != "con", variable == "p.vo2.4mmol") %>%
+  lmer(change ~ period * type.1.cap.area + pre + (1 | id), data = .) %>%
+  summ(confint = TRUE, digits = 3) %>% 
+  print()
+
+mod <- data %>%
+  filter(period != "con", variable == "ge.3.fresh") %>%
+  lmer(change ~ period * type.1.cap.area + pre + (1 | id), data = .) %>%
+  summ(confint = TRUE, digits = 3) %>% 
+  print()
+
+```
+
+
+#### Capillaries around type II muscle fibers per area at baseline
+
+```{r}
+
+mod <- data %>%
+  filter(period != "con", variable == "index") %>%
+  lmer(change ~ period * type.2.cap.area + pre + (1 | id), data = .) %>%
+  summ(confint = TRUE, digits = 3) %>% 
+  print()
+
+mod <- data %>%
+  filter(period != "con", variable == "w.rel.15tt") %>%
+  lmer(change ~ period * type.2.cap.area + pre + (1 | id), data = .) %>%
+  summ(confint = TRUE, digits = 3) %>% 
+  print()
+
+mod <- data %>%
+  filter(period != "con", variable == "w.rel.max") %>%
+  lmer(change ~ period * type.2.cap.area + pre + (1 | id), data = .) %>%
+  summ(confint = TRUE, digits = 3) %>% 
+  print()
+
+mod <- data %>%
+  filter(period != "con", variable == "w.rel.4mmol") %>%
+  lmer(change ~ period * type.2.cap.area + pre + (1 | id), data = .) %>%
+  summ(confint = TRUE, digits = 3) %>% 
+  print()
+
+mod <- data %>%
+  filter(period != "con", variable == "vo2.rel.max") %>%
+  lmer(change ~ period * type.2.cap.area + pre + (1 | id), data = .) %>%
+  summ(confint = TRUE, digits = 3) %>% 
+  print()
+
+mod <- data %>%
+  filter(period != "con", variable == "p.vo2.4mmol") %>%
+  lmer(change ~ period * type.2.cap.area + pre + (1 | id), data = .) %>%
+  summ(confint = TRUE, digits = 3) %>% 
+  print()
+
+mod <- data %>%
+  filter(period != "con", variable == "ge.3.fresh") %>%
+  lmer(change ~ period * type.2.cap.area + pre + (1 | id), data = .) %>%
+  summ(confint = TRUE, digits = 3) %>% 
+  print()
+
+```
+
+
 ## Blood variables
 
 #### Hemoglobin mass
@@ -1114,53 +1558,7 @@ mod <- data %>%
 
 ```
 
-#### Plasma volume
 
-```{r}
-
-mod <- data %>%
-  filter(period != "con", variable == "index") %>%
-  lmer(change ~ period * pv.kg + pre + (1 | id), data = .) %>%
-  summ(confint = TRUE, digits = 3) %>% 
-  print()
-
-mod <- data %>%
-  filter(period != "con", variable == "w.rel.15tt") %>%
-  lmer(change ~ period * pv.kg + pre + (1 | id), data = .) %>%
-  summ(confint = TRUE, digits = 3) %>% 
-  print()
-
-mod <- data %>%
-  filter(period != "con", variable == "w.rel.max") %>%
-  lmer(change ~ period * pv.kg + pre + (1 | id), data = .) %>%
-  summ(confint = TRUE, digits = 3) %>% 
-  print()
-
-mod <- data %>%
-  filter(period != "con", variable == "w.rel.4mmol") %>%
-  lmer(change ~ period * pv.kg + pre + (1 | id), data = .) %>%
-  summ(confint = TRUE, digits = 3) %>% 
-  print()
-
-mod <- data %>%
-  filter(period != "con", variable == "vo2.rel.max") %>%
-  lmer(change ~ period * pv.kg + pre + (1 | id), data = .) %>%
-  summ(confint = TRUE, digits = 3) %>% 
-  print()
-
-mod <- data %>%
-  filter(period != "con", variable == "p.vo2.4mmol") %>%
-  lmer(change ~ period * pv.kg + pre + (1 | id), data = .) %>%
-  summ(confint = TRUE, digits = 3) %>% 
-  print()
-
-mod <- data %>%
-  filter(period != "con", variable == "ge.3.fresh") %>%
-  lmer(change ~ period * pv.kg + pre + (1 | id), data = .) %>%
-  summ(confint = TRUE, digits = 3) %>% 
-  print()
-
-```
 
 ## Perceived feeling
 
@@ -1211,6 +1609,13 @@ mod <- data %>%
   print()
 
 ```
+
+
+
+
+
+
+
 
 # Figure 5 with panels A, B, C, D
 

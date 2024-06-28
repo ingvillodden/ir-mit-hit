@@ -23,7 +23,6 @@ library(cowplot)
 library(plotly)
 library(jtools)
 library(gridGraphics)
-install.packages("ggh4x")
 library(ggh4x)
 
 ```
@@ -134,9 +133,9 @@ hb_data <-
   read_excel("data/hb_ir_data.xlsx", na = "na") %>%
   print()
 
-#immuno_data <-
-  #read_excel("data/immuno_ir_data.xlsx", na = "na") %>%
-  #print()
+immuno_data <-
+  read_excel("data/immuno_ir_data.xlsx", na = "na") %>%
+  print()
 
 # Combining the pre data sets to one pre intervention data set
 pre_intervention_data <-
@@ -144,6 +143,7 @@ pre_intervention_data <-
   inner_join(ultrasound_data) %>% 
   inner_join(dxa_data) %>%
   inner_join(hb_data) %>% 
+  inner_join(immuno_data) %>% 
   print()
 
 
@@ -464,7 +464,7 @@ bodymass_data  <- pre_post_data %>%
 pre_data <- pre_intervention_data %>% # Remember to specify fiber type, capillary density ect here
   mutate(lean.mass.legs = `Bein Mager masse` / 1000) %>% 
   mutate(fat.free.mass.legs = `Bein Fettfri masse` / 1000) %>% 
-  select(id, w.rel.40tt, hbmass.kg, bv.kg, pv.kg, lat.avg, interm.avg, lean.mass.legs, fat.free.mass.legs, BMI) %>%
+  select(id, w.rel.40tt, hbmass.kg, bv.kg, pv.kg, lat.avg, interm.avg, lean.mass.legs, fat.free.mass.legs, BMI, type.1.area, type.2.area, p.type.1, cd, cf, type.1.cap.fibre, type.2.cap.fibre, type.1.cap.area, type.2.cap.area) %>%
   print()
 
 training_data <- sessions_data %>% 
