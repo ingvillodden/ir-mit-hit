@@ -1402,6 +1402,7 @@ ggsave("figures/figure5.pdf", plot = figure5, width = 8.5, height = 8.5,
 
 ```
 
+
 ```{r}
 
 # Setting axis width, axis ticks width and length, label size, line width, point size and colours
