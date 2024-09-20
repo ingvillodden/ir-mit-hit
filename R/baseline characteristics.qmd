@@ -33,7 +33,7 @@ baseline_mit <- pre_post_data %>%
 
 
 baseline_intervention <- baseline_con %>%
-  full_join(baseline_mit) %>% 
+  full_join(baseline_mit) %>%
         summarise(age.m = mean(age, na.rm = TRUE),
                   age.s = sd(age, na.rm = TRUE),
                   
@@ -152,6 +152,26 @@ baseline <- pre_post_data %>%
 
 write_xlsx(baseline, "C:\\ir-mit-hit\\baseline_ir.xlsx")
 
+
+
+# Lage tabell som viser mean (SD) verider på hbmasse, kapillærer osv
+
+baseline_intervention_histology <- pre_intervention_data %>% view()
+        summarise(age.m = mean(age, na.rm = TRUE),
+                  age.s = sd(age, na.rm = TRUE),
+                  
+                  bodymass.m = mean(bodymass, na.rm = TRUE),
+                  bodymass.s = sd(bodymass, na.rm = TRUE),
+                  
+                  bodyheight.m = mean(bodyheight, na.rm = TRUE),
+                  bodyheight.s = sd(bodyheight, na.rm = TRUE),
+                  
+                  type.2.cap.area.m = mean(type.2.cap.area, na.rm = TRUE),
+                  type.2.cap.area.s = sd(type.2.cap.area, na.rm = TRUE),
+                  
+                  hbmass.kg.m = mean(hbmass.kg, na.rm = TRUE),
+                  hbmass.kg.s = sd(hbmass.kg, na.rm = TRUE)) %>% 
+  print()
 
 
 

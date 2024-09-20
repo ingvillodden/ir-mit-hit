@@ -8,8 +8,6 @@ editor_options:
 
 #### Associations between physiological characteristics and within-intdividual responses to the MIT block compared to the HIT block
 
-
-
 #### % of VO2max during sessions
 
 ```{r}
@@ -37,6 +35,20 @@ mod <- data %>%
   lmer(change ~ period * rel.vo2 + pre + (1 | id), data = .) %>%
   summ(confint = TRUE, digits = 3) %>% 
   print()
+
+##### Add these analyses as well?
+mod <- data %>%
+  filter(period == "mit", variable == "vo2.rel.max") %>%
+  lm(change ~ rel.vo2 + pre , data = .) %>% 
+  summ(confint = TRUE, digits = 3) %>% 
+  print()
+
+mod <- data %>%
+  filter(period == "hit", variable == "vo2.rel.max") %>%
+  lm(change ~ rel.vo2 + pre , data = .) %>% 
+  summ(confint = TRUE, digits = 3) %>% 
+  print()
+####
 
 mod <- data %>%
   filter(period != "con", variable == "vo2.rel.max") %>%
@@ -255,7 +267,6 @@ mod <- data %>%
 
 
 ```
-
 
 ## Whole body characteristics
 
@@ -844,7 +855,6 @@ mod <- data %>%
 
 ```
 
-
 #### Type I muscle fiber cross-sectional area at baseline
 
 ```{r}
@@ -892,8 +902,6 @@ mod <- data %>%
   print()
 
 ```
-
-
 
 #### Type II muscle fiber cross-sectional area at baseline
 
@@ -943,7 +951,6 @@ mod <- data %>%
 
 ```
 
-
 #### Proportion of type I muscle fibers at baseline
 
 ```{r}
@@ -991,7 +998,6 @@ mod <- data %>%
   print()
 
 ```
-
 
 #### Capillary density at baseline
 
@@ -1041,7 +1047,6 @@ mod <- data %>%
 
 ```
 
-
 #### Capillary-to-fiber ratio at baseline
 
 ```{r}
@@ -1089,8 +1094,6 @@ mod <- data %>%
   print()
 
 ```
-
-
 
 #### Capillaries around type I muscle fibers at baseline
 
@@ -1140,7 +1143,6 @@ mod <- data %>%
 
 ```
 
-
 #### Capillaries around type II muscle fibers at baseline
 
 ```{r}
@@ -1188,7 +1190,6 @@ mod <- data %>%
   print()
 
 ```
-
 
 #### Capillaries around type I muscle fibers per area at baseline
 
@@ -1238,7 +1239,6 @@ mod <- data %>%
 
 ```
 
-
 #### Capillaries around type II muscle fibers per area at baseline
 
 ```{r}
@@ -1286,7 +1286,6 @@ mod <- data %>%
   print()
 
 ```
-
 
 #### Hemoglobin mass
 
@@ -1337,7 +1336,6 @@ mod <- data %>%
 
 ```
 
-
 #### Perceived well-beein in the legs at all performed sessions during the blocks+taper
 
 ```{r}
@@ -1385,7 +1383,6 @@ mod <- data %>%
   print()
 
 ```
-
 
 # Figure 5 with panels A, B, C, D
 
@@ -1539,7 +1536,6 @@ ggsave("figures/figure5.tiff", plot = figure5, width = 16, height = 15,
 
 
 ```
-
 
 ```{r}
 

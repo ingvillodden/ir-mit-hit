@@ -6,7 +6,7 @@ editor_options:
   chunk_output_type: console
 ---
 
-#### Relationship between individual observed responses to MIT and HIT 
+#### Relationship between individual observed responses to MIT and HIT
 
 ```{r}
 
@@ -146,7 +146,6 @@ icc <- ICC(relation_data, alpha=.05, missing = TRUE) %>%  print()
 
 ```
 
-
 ```{r}
 
 # Figure 4
@@ -205,5 +204,3 @@ ggsave("figures/figure4.tiff", plot = figure4, width = 8.5, height = 7,
 
 
 ```
-
-

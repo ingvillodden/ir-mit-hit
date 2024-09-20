@@ -78,9 +78,20 @@ SDir_data <- SDir_all_data %>% filter(variable == "w.rel.15tt") %>% print()
 swc <- SDir_data %>% summarise(swc = pre_s_con*0.2) %>%  print()
   
 # SDir for the MIT and HIT block
+SDir_mit_hit <- sqrt(SDir_data$change_s_mit^2 - SDir_data$change_s_hit^2) %>% print()
+
 SDir_mit <- sqrt(SDir_data$change_s_mit^2 - SDir_data$change_s_con^2) %>% print() 
 
 SDir_hit <- sqrt(SDir_data$change_s_con^2 - SDir_data$change_s_hit^2) %>% print() # Minus is added in manuscript
+
+
+# CI (95%) for SDir MIT
+standard_error <- sqrt(2* ( ((SDir_data$change_s_mit^4)/ (18-1)) + 
+                              ((SDir_data$change_s_hit^4)/ (18-1)) ) ) %>% print()
+
+confint_upper_mit <- sqrt((SDir_mit^2) + (1.96 * standard_error)) %>% print() 
+confint_lower_mit <- sqrt(sqrt(((SDir_mit^2) - (1.96 * standard_error))^2)) %>% print() # Minus is added in manuscript
+
 
 # CI (95%) for SDir MIT
 standard_error <- sqrt(2* ( ((SDir_data$change_s_mit^4)/ (18-1)) + 
@@ -196,7 +207,7 @@ confint_lower_hit <- sqrt(sqrt(((SDir_hit^2) - (1.96 * standard_error))^2)) %>% 
 
 ```
 
-##### % of VO2max at 4mmol/L [La-]
+##### % of VO2max at 4mmol/L \[La-\]
 
 ```{r}
 
@@ -260,7 +271,6 @@ confint_lower_hit <- sqrt(sqrt((-(SDir_hit^2) - (1.96 * standard_error))^2)) %>%
 
 ```
 
-
 #### Figure 3
 
 ```{r}
@@ -278,7 +288,7 @@ shape_scale <- c(15, 19, 17) # Square, Dot and triangle
 
 # Creating the figure
 figure3 <- data %>% 
-  filter(variable == "w.rel.15tt") %>% 
+  filter(variable == "w.rel.15tt") %>%
   mutate(period = factor(period, levels = c("con", "mit", "hit"), 
                         labels = c("CON", "MIT block", "HIT block"))) %>%
   ggplot(aes(x=period, y=change)) +
